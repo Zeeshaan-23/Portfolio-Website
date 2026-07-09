@@ -16,41 +16,41 @@ const PAPER_BALLS = [
     spriteIndex: 1 as const,
     sectionId: "about" as const,
     label: "About",
-    left: "12%",
-    bottom: "8%",
-    size: 100,
+    left: "14%",
+    bottom: "6%",
+    size: 115,
   },
   {
     spriteIndex: 2 as const,
     sectionId: "skills-certs" as const,
     label: "Skills & Certs",
-    left: "24%",
-    bottom: "14%",
-    size: 115,
+    left: "28%",
+    bottom: "16%",
+    size: 85,
   },
   {
     spriteIndex: 3 as const,
     sectionId: "projects" as const,
     label: "Projects",
-    left: "76%",
-    bottom: "12%",
-    size: 108,
+    left: "72%",
+    bottom: "18%",
+    size: 78,
   },
   {
     spriteIndex: 4 as const,
     sectionId: "experience" as const,
     label: "Experience",
-    left: "88%",
-    bottom: "7%",
-    size: 95,
+    left: "84%",
+    bottom: "9%",
+    size: 110,
   },
   {
     spriteIndex: 5 as const,
     sectionId: "domains" as const,
     label: "Domains of Study",
-    left: "62%",
-    bottom: "16%",
-    size: 120,
+    left: "36%",
+    bottom: "8%",
+    size: 105,
   },
 ] as const;
 
@@ -77,8 +77,8 @@ export default function GalleryScene() {
         <Image
           src="/assets/statue.png"
           alt="Classical Greek marble statue on a pedestal"
-          width={380}
-          height={570}
+          width={450}
+          height={675}
           className={styles.statueImage}
           priority
           quality={95}

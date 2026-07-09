@@ -21,6 +21,14 @@ yet. Just get the static skeleton working end-to-end.
 If any listed asset is missing, use a clearly-labeled placeholder (solid color block with
 a text label) in its place and flag it in your summary — do not block on missing assets.
 
+## Build log — maintain automatically
+Maintain `BUILD_LOG.md` in this folder without being asked. Create it if it doesn't exist,
+using the piece status table from `DESIGN.md` §6 as a starting point. After every commit,
+append a short entry: what changed, and why, if you made a judgment call the design doc
+didn't specify. Update the piece status table when a piece's status changes. Keep entries
+terse. Do this for every task in this project going forward, not just this one — it's how
+context is kept across separate sessions with me and with Claude.
+
 ## Git / commit workflow
 - Commit at each logical checkpoint as you go (e.g. after project scaffolding, after the
   gallery background + statue render, after paper balls are positioned, after click

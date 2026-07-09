@@ -31,16 +31,15 @@
 /* The paper ball image */
 .ball {
   position: relative;
-  /* mix-blend-mode: multiply drops white background from sprite PNG
-     so it composites naturally over the dark gallery floor */
-  mix-blend-mode: multiply;
-  filter: brightness(0.88) contrast(1.08);
+  /* Transparent background sprite is now dimmed to fit gallery ambience and drop-shadowed to ground it on floor */
+  filter: brightness(0.65) saturate(0.85) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
   transition: filter var(--transition-med);
 }
 
 .wrapper:hover .ball {
-  filter: brightness(1.05) contrast(1.12)
-    drop-shadow(0 0 8px rgba(57, 255, 20, 0.35));
+  filter: brightness(0.9) saturate(1.0)
+    drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 12px rgba(57, 255, 20, 0.5));
 }
 
 /* Floating section label — only visible on hover */
