@@ -17,7 +17,7 @@ const PAPER_BALLS = [
     sectionId: "about" as const,
     label: "About",
     left: "14%",
-    bottom: "6%",
+    bottom: "12%",
     size: 115,
   },
   {
@@ -25,7 +25,7 @@ const PAPER_BALLS = [
     sectionId: "skills-certs" as const,
     label: "Skills & Certs",
     left: "28%",
-    bottom: "16%",
+    bottom: "22%",
     size: 85,
   },
   {
@@ -33,7 +33,7 @@ const PAPER_BALLS = [
     sectionId: "projects" as const,
     label: "Projects",
     left: "72%",
-    bottom: "18%",
+    bottom: "24%",
     size: 78,
   },
   {
@@ -41,7 +41,7 @@ const PAPER_BALLS = [
     sectionId: "experience" as const,
     label: "Experience",
     left: "84%",
-    bottom: "9%",
+    bottom: "15%",
     size: 110,
   },
   {
@@ -49,7 +49,7 @@ const PAPER_BALLS = [
     sectionId: "domains" as const,
     label: "Domains of Study",
     left: "36%",
-    bottom: "8%",
+    bottom: "14%",
     size: 105,
   },
 ] as const;

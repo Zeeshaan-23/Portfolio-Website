@@ -37,7 +37,6 @@ export default function PaperBall({
   const handleClick = () => {
     if (!sectionId) return;
     setCurrentSection(sectionId);
-    router.push(`/${sectionId}`);
   };
 
   return (

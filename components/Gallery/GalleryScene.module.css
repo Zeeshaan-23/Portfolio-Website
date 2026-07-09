@@ -1,7 +1,6 @@
 /* Full-viewport scene container */
 .scene {
-  position: fixed;
-  inset: 0;
+  position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -44,10 +43,10 @@
 /* ── Layer 3: Statue ── */
 .statueWrapper {
   position: absolute;
-  /* Centered horizontally, bottom of statue sits at ~11% from bottom
+  /* Centered horizontally, bottom of statue sits at ~23% from bottom
      so the pedestal appears to rest on the museum floor crack origin */
   left: 50%;
-  bottom: 11%;
+  bottom: 23%;
   transform: translateX(-50%);
   z-index: 3;
 
@@ -59,14 +58,14 @@
 .statueImage {
   display: block;
   /* Background is now transparent PNG, so no mix-blend-mode workaround is needed.
-     Dimmed slightly to blend with museum ambient lighting. */
-  filter: brightness(0.82) contrast(0.95) saturate(0.9);
+     Dimmed significantly to read as part of the ambient darkness under spotlight. */
+  filter: brightness(0.50) contrast(0.90) saturate(0.80);
 }
 
 /* Responsive: shrink statue on shorter/narrower viewports */
 @media (max-height: 700px) {
   .statueWrapper {
-    bottom: 8%;
+    bottom: 18%;
   }
   .statueImage {
     width: 330px !important;

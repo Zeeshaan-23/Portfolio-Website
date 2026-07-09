@@ -41,11 +41,19 @@
   padding: 0;
 }
 
-html,
+html {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+  scroll-behavior: auto; /* Handled by Lenis */
+}
+
 body {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: var(--color-bg);
   color: var(--color-marble);
   font-family: var(--font-mono);
@@ -85,4 +93,26 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ---- Lenis smooth scroll adjustments ---- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
 }
