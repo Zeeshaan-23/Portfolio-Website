@@ -1,0 +1,97 @@
+/* Full-viewport scene container */
+.scene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Layer 1: Background ── */
+.bgLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ── Layer 2: CSS spotlight cone ── */
+/*
+  The gallery background already has an overhead light baked in at top-center.
+  We add a subtle acid-green radial spotlight to tint the statue area,
+  suggesting the digital "electricity" bleeding into the museum light.
+  Accent used sparingly — very low opacity per 90/10 rule in DESIGN.md §2.
+*/
+.spotlight {
+  position: absolute;
+  /* Centered horizontally, emanating from top */
+  left: 50%;
+  top: -10%;
+  transform: translateX(-50%);
+  width: 520px;
+  height: 85%;
+  z-index: 2;
+  pointer-events: none;
+
+  background: radial-gradient(
+    ellipse 42% 60% at 50% 0%,
+    rgba(57, 255, 20, 0.07) 0%,
+    rgba(57, 255, 20, 0.04) 30%,
+    rgba(57, 255, 20, 0.015) 60%,
+    transparent 80%
+  );
+}
+
+/* ── Layer 3: Statue ── */
+.statueWrapper {
+  position: absolute;
+  /* Centered horizontally, bottom of statue sits at ~18% from bottom
+     so the pedestal appears to rest on the museum floor crack origin */
+  left: 50%;
+  bottom: 14%;
+  transform: translateX(-50%);
+  z-index: 3;
+
+  /* Feather the edges so the statue dark-BG fades into the gallery wall
+     instead of showing a hard rectangular crop */
+  mask-image: radial-gradient(
+    ellipse 82% 88% at 50% 50%,
+    black 55%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 82% 88% at 50% 50%,
+    black 55%,
+    transparent 100%
+  );
+
+  /* Drop-shadow for depth */
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.75))
+    drop-shadow(0 0 6px rgba(57, 255, 20, 0.05));
+}
+
+.statueImage {
+  display: block;
+  /* multiply darkens the grey statue background into the dark gallery walls
+     so the rectangle disappears. The bright marble figure is bright enough
+     to still read clearly after multiply darkening. */
+  mix-blend-mode: multiply;
+  filter: contrast(1.1) brightness(1.45) saturate(0.9);
+}
+
+/* Responsive: shrink statue on shorter/narrower viewports */
+@media (max-height: 700px) {
+  .statueWrapper {
+    bottom: 10%;
+  }
+  .statueImage {
+    width: 280px !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .statueImage {
+    width: 240px !important;
+    height: auto !important;
+  }
+}

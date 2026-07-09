@@ -1,0 +1,88 @@
+/* ============================================================
+   Design System — Digital Antiquity
+   Palette from DESIGN.md §2
+   ============================================================ */
+
+:root {
+  /* Palette */
+  --color-concrete-light: #8a8a86;
+  --color-concrete-dark: #6e6e6a;
+  --color-marble: #e8e2d4;
+  --color-paper: #e6dcc0;
+  --color-ink: #1c1a17;
+  --color-accent: #39ff14; /* acid green — use sparingly */
+  --color-shadow: rgba(17, 17, 17, 0.85);
+  --color-bg: #0d0d0c;
+
+  /* Typography */
+  --font-serif: var(--font-serif, "Special Elite", Georgia, serif);
+  --font-mono: var(--font-mono, "JetBrains Mono", "Courier New", monospace);
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-med: 300ms ease;
+  --transition-slow: 600ms ease;
+}
+
+/* ---- Reset / Base ---- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  color: var(--color-marble);
+  font-family: var(--font-mono);
+  cursor: default;
+}
+
+/* Disable text selection on interactive scene elements */
+.scene-layer {
+  user-select: none;
+}
+
+/* ---- Fade transition for section nav ---- */
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity var(--transition-slow);
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+}
+
+/* ---- Utility: visually hidden (a11y) ---- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

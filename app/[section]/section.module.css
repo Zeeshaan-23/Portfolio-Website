@@ -1,0 +1,136 @@
+.page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(2rem, 8vw, 7rem);
+  background-color: var(--color-bg);
+  animation: fadeIn 0.5s ease forwards;
+
+  /* Subtle vignette */
+  background-image: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    rgba(30, 28, 25, 0.4) 0%,
+    rgba(13, 13, 12, 0.0) 70%
+  );
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Terminal prompt line */
+.prompt {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  color: rgba(57, 255, 20, 0.6);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.06em;
+}
+
+.promptSymbol {
+  color: var(--color-accent);
+  margin-right: 0.4em;
+}
+
+.promptCommand {
+  color: rgba(57, 255, 20, 0.7);
+}
+
+/* Section title */
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  color: var(--color-marble);
+  line-height: 1;
+  margin-bottom: 1rem;
+  /* Subtle text-shadow to give the aged, worn feel */
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(57, 255, 20, 0.04);
+}
+
+/* Subtitle */
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+  color: var(--color-concrete-light);
+  letter-spacing: 0.04em;
+  margin-bottom: 3rem;
+  max-width: 52ch;
+}
+
+/* Placeholder blinking cursor indicator */
+.placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+.cursor {
+  color: var(--color-accent);
+  animation: blink 1.1s step-end infinite;
+  font-size: 1.1rem;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.placeholderText {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: rgba(138, 138, 134, 0.55);
+  letter-spacing: 0.08em;
+}
+
+/* Mono utility for 404 */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--color-marble);
+  margin-bottom: 0.75rem;
+}
+
+.accent {
+  color: var(--color-accent);
+}
+
+/* Back button */
+.backBtn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--color-concrete-light);
+  background: transparent;
+  border: 1px solid rgba(138, 138, 134, 0.3);
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.backBtn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: rgba(57, 255, 20, 0.06);
+}
+
+.backBtn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* 404 centering */
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
