@@ -138,9 +138,12 @@ export default function MainScrollContainer() {
     }
   }, [params.section]);
 
-  // Trigger smooth scroll when currentSection is updated (e.g. paper ball click)
+  // Trigger smooth scroll when currentSection is updated programmatically (e.g. paper ball click)
   useEffect(() => {
     if (!lenisRef.ref) return;
+
+    const isProgrammatic = useNavigationStore.getState().isProgrammatic;
+    if (!isProgrammatic) return;
 
     if (currentSection === null) {
       const heroEl = document.getElementById("gallery-hero");
@@ -149,25 +152,30 @@ export default function MainScrollContainer() {
         lenisRef.ref.scrollTo(heroEl, {
           onComplete: () => {
             isScrollingRef.current = false;
+            useNavigationStore.getState().setProgrammatic(false);
+            window.history.pushState(null, "", "/");
           },
         });
       }
     } else {
       const targetEl = document.getElementById(`section-${currentSection}`);
-      const currentScrollY = window.scrollY;
-      const targetScrollY = targetEl?.getBoundingClientRect().top ?? 0;
-
-      // Only scroll if we aren't already aligned near the target
-      if (targetEl && Math.abs(targetScrollY) > 10) {
+      if (targetEl) {
         isScrollingRef.current = true;
         lenisRef.ref.scrollTo(targetEl, {
           onComplete: () => {
             isScrollingRef.current = false;
+            useNavigationStore.getState().setProgrammatic(false);
+            window.history.pushState(null, "", `/${currentSection}`);
           },
         });
       }
     }
   }, [currentSection]);
+
+  const handleReturnToGallery = () => {
+    useNavigationStore.getState().setProgrammatic(true);
+    setCurrentSection(null);
+  };
 
   return (
     <div className={styles.container}>
@@ -213,7 +221,7 @@ export default function MainScrollContainer() {
               {/* Return to gallery helper */}
               <button
                 className={styles.returnBtn}
-                onClick={() => setCurrentSection(null)}
+                onClick={handleReturnToGallery}
               >
                 ← Return to Gallery
               </button>

@@ -33,9 +33,13 @@ export default function PaperBall({
   const setCurrentSection = useNavigationStore(
     (state) => state.setCurrentSection
   );
+  const setProgrammatic = useNavigationStore(
+    (state) => state.setProgrammatic
+  );
 
   const handleClick = () => {
     if (!sectionId) return;
+    setProgrammatic(true);
     setCurrentSection(sectionId);
   };
 

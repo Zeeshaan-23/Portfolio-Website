@@ -28,3 +28,8 @@
 - Moved all paper balls vertically upward to maintain viewport bottom margins.
 - Elevated the statue higher on the pedestal and deepened its dimming filters to blend with ambient room tones.
 - Built fullscreen parchment section panels beneath the hero for all 5 routes.
+
+### 2026-07-10 (Piece 1 Revisions Part 3)
+- Refined Greek statue visuals: increased image size by ~11%, lowered position to align base with floor crack origin, and increased brightness filter to `brightness(0.68)` for visual hierarchy.
+- Updated vertically stacked sections to be completely fullscreen and edge-to-edge (100vw × 100vh), removing padding, border-radius, and box shadow constraints from `.paperSheet`.
+- Fixed "Return to Gallery" behavior by introducing an `isProgrammatic` scrolling flag in `navigationStore` to coordinate state, scroll, and URL history updates, resolving scroll-fighting and scroll-path URL inconsistencies.

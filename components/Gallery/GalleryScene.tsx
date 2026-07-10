@@ -77,8 +77,8 @@ export default function GalleryScene() {
         <Image
           src="/assets/statue.png"
           alt="Classical Greek marble statue on a pedestal"
-          width={450}
-          height={675}
+          width={500}
+          height={750}
           className={styles.statueImage}
           priority
           quality={95}

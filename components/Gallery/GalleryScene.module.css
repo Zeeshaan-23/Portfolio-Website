@@ -43,10 +43,10 @@
 /* ── Layer 3: Statue ── */
 .statueWrapper {
   position: absolute;
-  /* Centered horizontally, bottom of statue sits at ~23% from bottom
+  /* Centered horizontally, bottom of statue sits at ~15% from bottom
      so the pedestal appears to rest on the museum floor crack origin */
   left: 50%;
-  bottom: 23%;
+  bottom: 15%;
   transform: translateX(-50%);
   z-index: 3;
 
@@ -58,24 +58,24 @@
 .statueImage {
   display: block;
   /* Background is now transparent PNG, so no mix-blend-mode workaround is needed.
-     Dimmed significantly to read as part of the ambient darkness under spotlight. */
-  filter: brightness(0.50) contrast(0.90) saturate(0.80);
+     Dimmed slightly to read as part of the ambient darkness under spotlight but stand out as focal point. */
+  filter: brightness(0.68) contrast(0.90) saturate(0.80);
 }
 
 /* Responsive: shrink statue on shorter/narrower viewports */
 @media (max-height: 700px) {
   .statueWrapper {
-    bottom: 18%;
+    bottom: 11%;
   }
   .statueImage {
-    width: 330px !important;
+    width: 370px !important;
     height: auto !important;
   }
 }
 
 @media (max-width: 768px) {
   .statueImage {
-    width: 280px !important;
+    width: 315px !important;
     height: auto !important;
   }
 }
