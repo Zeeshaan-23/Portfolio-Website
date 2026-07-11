@@ -21,7 +21,9 @@
   * Tied brightness and opacity transitions of inner sheet elements to active scroll offsets using a custom DOM-ref-linked Lenis event listener.
   * Updated in follow-up revision: Removed the outgoing section's scale-down animation (`1.0` -> `0.94`) so that outgoing pages stay stationary at full size and only dim as they are covered by the next page.
   * Achieved high-performance depth-layering transitions (dimming to `0.6` brightness and `0.7` opacity) without triggering React component re-renders.
-  * Preserved full functionality of Zustand state sync, Intersection Observer URLs, and programmatic scrolling targets.
+  * **Fixed Return to Gallery Navigation Bug:**
+    * Replaced element-based scroll targets in Lenis `scrollTo` calls with calculated numeric pixel targets (`0` for the hero scene, and `(index + 1) * window.innerHeight` for sub-sections). This bypasses sticky element bounding box calculation constraints where Lenis evaluated travel distance as `0`.
+    * Removed `IntersectionObserver` active-section tracking to avoid hydration and layout shift race conditions. Implemented robust scroll-listener math-based section tracking inside the Lenis event handler to reliably update the active section state and URL path during manual scrolls.
 
 ### 2026-07-11 (Piece 2a Revisions Part 2)
 - Refined **Hero Name**: 
