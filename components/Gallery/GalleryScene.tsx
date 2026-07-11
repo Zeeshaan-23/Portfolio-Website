@@ -74,9 +74,8 @@ export default function GalleryScene() {
 
       {/* ── Layer 2b: Hero Name (Top-left display) ── */}
       <h1 className={styles.heroName}>
-        Zeeshaan
-        <br />
-        Suhail Shaik
+        <div>Zeeshaan</div>
+        <div className={styles.secondLine}>Suhail Shaik</div>
       </h1>
 
       {/* ── Layer 3: Statue (plain image for Piece 1 — no ASCII split yet) ── */}
