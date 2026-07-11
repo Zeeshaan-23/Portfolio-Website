@@ -112,6 +112,22 @@ export default function MainScrollContainer() {
           el.style.opacity = `${opacity}`;
         }
       });
+
+      // 3. Update active section state and URL based on current scroll position
+      if (!isScrollingRef.current) {
+        const activeIdx = Math.round(scrollY / vh);
+        const activeSectionId = activeIdx === 0 ? null : SECTIONS[activeIdx - 1]?.id || null;
+        
+        const current = useNavigationStore.getState().currentSection;
+        if (activeSectionId !== current) {
+          setCurrentSection(activeSectionId);
+          if (activeSectionId === null) {
+            window.history.pushState(null, "", "/");
+          } else {
+            window.history.pushState(null, "", `/${activeSectionId}`);
+          }
+        }
+      }
     };
 
     lenis.on("scroll", handleScroll);
@@ -123,49 +139,6 @@ export default function MainScrollContainer() {
       lenis.destroy();
       delete (window as any).lenis;
       clearTimeout(timer);
-    };
-  }, []);
-
-  // Intersection Observer to update state & URL during scroll
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.45, // Trigger when section is ~50% in view
-    };
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      // If programmatically scrolling (clicking a ball), bypass observer URL updates
-      if (isScrollingRef.current) return;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute("id");
-          if (id === "gallery-hero") {
-            setCurrentSection(null);
-            window.history.pushState(null, "", "/");
-          } else if (id && id.startsWith("section-")) {
-            const sectionSlug = id.replace("section-", "") as SectionId;
-            setCurrentSection(sectionSlug);
-            window.history.pushState(null, "", `/${sectionSlug}`);
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
-    // Observe hero and sections
-    const heroEl = document.getElementById("gallery-hero");
-    if (heroEl) observer.observe(heroEl);
-
-    SECTIONS.forEach((sec) => {
-      const el = document.getElementById(`section-${sec.id}`);
-      if (el) observer.observe(el);
-    });
-
-    return () => {
-      observer.disconnect();
     };
   }, [setCurrentSection]);
 
