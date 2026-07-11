@@ -83,7 +83,7 @@
 /* ── Hero Name display ── */
 .heroName {
   position: absolute;
-  top: 1rem;
+  top: 0.9em;
   left: 0;
   z-index: 1; /* Behind spotlight (2) and statue (3) */
   font-family: var(--font-mono);
@@ -100,7 +100,7 @@
 
 @media (max-width: 768px) {
   .heroName {
-    top: 1rem;
+    top: 0.9em;
     left: 0;
     font-size: clamp(2rem, 7vw, 4rem);
   }
@@ -117,8 +117,8 @@
   transition: transform 200ms ease, filter 200ms ease;
   outline: none;
 
-  /* Dimming filter at rest: blends into dim gallery lighting */
-  filter: brightness(0.70) saturate(0.85);
+  /* Dimmed further to blend deeper into dim gallery lighting at rest */
+  filter: brightness(0.45) saturate(0.80);
 }
 
 .resumeScrollImage {
