@@ -46,7 +46,7 @@
 html {
   width: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
   height: auto;
   scroll-behavior: auto; /* Handled by Lenis */
   
@@ -58,8 +58,7 @@ html {
 body {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: clip;
   background-color: var(--color-bg);
   color: var(--color-marble);
   font-family: var(--font-mono);
