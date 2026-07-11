@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Black halo underneath for contrast -->
+  <path d="M 0 12 L 9 12 M 15 12 L 24 12 M 12 0 L 12 9 M 12 15 L 12 24" stroke="rgba(17, 17, 17, 0.6)" stroke-width="3" stroke-linecap="square"/>
+  <circle cx="12" cy="12" r="3.5" fill="rgba(17, 17, 17, 0.6)"/>
+  <!-- Green lines on top -->
+  <path d="M 0 12 L 9 12 M 15 12 L 24 12 M 12 0 L 12 9 M 12 15 L 12 24" stroke="#39ff14" stroke-width="1" stroke-linecap="square"/>
+  <circle cx="12" cy="12" r="2" fill="#39ff14"/>
+</svg>
