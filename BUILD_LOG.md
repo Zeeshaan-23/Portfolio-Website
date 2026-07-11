@@ -18,8 +18,9 @@
 ### 2026-07-11 (Piece 2b: Scroll Stack)
 - Implemented **Scroll Stack / Depth Layering**:
   * Configured CSS Sticky Stacking (`position: sticky; top: 0;`) and ordered `z-index` stacking values across the landing hero and all section pages.
-  * Tied scale, brightness, and opacity transitions of inner sheet elements to active scroll offsets using a custom DOM-ref-linked Lenis event listener.
-  * Achieved high-performance depth-layering transitions (scaling from `1.0` to `0.94`, dimming to `0.6` brightness and `0.7` opacity) without triggering React component re-renders.
+  * Tied brightness and opacity transitions of inner sheet elements to active scroll offsets using a custom DOM-ref-linked Lenis event listener.
+  * Updated in follow-up revision: Removed the outgoing section's scale-down animation (`1.0` -> `0.94`) so that outgoing pages stay stationary at full size and only dim as they are covered by the next page.
+  * Achieved high-performance depth-layering transitions (dimming to `0.6` brightness and `0.7` opacity) without triggering React component re-renders.
   * Preserved full functionality of Zustand state sync, Intersection Observer URLs, and programmatic scrolling targets.
 
 ### 2026-07-11 (Piece 2a Revisions Part 2)

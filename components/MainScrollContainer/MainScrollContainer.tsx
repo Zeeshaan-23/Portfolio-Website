@@ -80,7 +80,7 @@ export default function MainScrollContainer() {
     // Expose lenis instance globally for scroll-to-element calls
     (window as any).lenis = lenis;
 
-    // Handle book-style scroll stack transitions (scale down & dim outgoing sections)
+    // Handle book-style scroll stack transitions (dim outgoing sections, no scaling)
     const handleScroll = () => {
       const scrollY = lenis.scroll;
       const vh = window.innerHeight || 1;
@@ -88,11 +88,9 @@ export default function MainScrollContainer() {
       // 1. Gallery Hero Inner Section (index 0)
       if (heroInnerRef.current) {
         const p = Math.max(0, Math.min(1, scrollY / vh));
-        const scale = 1 - p * 0.06;      // Scale 1.0 -> 0.94
         const brightness = 1 - p * 0.4;  // Dim brightness 1.0 -> 0.6
         const opacity = 1 - p * 0.3;     // Dim opacity 1.0 -> 0.7
         
-        heroInnerRef.current.style.transform = `scale(${scale})`;
         heroInnerRef.current.style.filter = `brightness(${brightness})`;
         heroInnerRef.current.style.opacity = `${opacity}`;
       }
@@ -103,11 +101,9 @@ export default function MainScrollContainer() {
         if (el) {
           const startScroll = (idx + 1) * vh;
           const p = Math.max(0, Math.min(1, (scrollY - startScroll) / vh));
-          const scale = 1 - p * 0.06;      // Scale 1.0 -> 0.94
           const brightness = 1 - p * 0.4;  // Dim brightness 1.0 -> 0.6
           const opacity = 1 - p * 0.3;     // Dim opacity 1.0 -> 0.7
           
-          el.style.transform = `scale(${scale})`;
           el.style.filter = `brightness(${brightness})`;
           el.style.opacity = `${opacity}`;
         }
@@ -226,7 +222,7 @@ export default function MainScrollContainer() {
     <div className={styles.container}>
       {/* ── Gallery Hero Section (100vh) ── */}
       <section id="gallery-hero" className={styles.heroSection} style={{ zIndex: 1 }}>
-        <div ref={heroInnerRef} style={{ width: "100%", height: "100%", willChange: "transform, filter, opacity" }}>
+        <div ref={heroInnerRef} style={{ width: "100%", height: "100%", willChange: "filter, opacity" }}>
           <GalleryScene />
         </div>
       </section>
@@ -245,7 +241,7 @@ export default function MainScrollContainer() {
               sectionInnerRefs.current[idx] = el;
             }}
             className={styles.paperSheet}
-            style={{ willChange: "transform, filter, opacity" }}
+            style={{ willChange: "filter, opacity" }}
           >
             {/* Aged paper subtle shadow/burn overlay */}
             <div className={styles.paperTexture} />

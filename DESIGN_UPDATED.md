@@ -344,38 +344,47 @@ Use with Midjourney, DALL-E, or SDXL/Stable Diffusion:
 
 ## 14. Scroll Stack / Depth Layering (Piece 2b)
 
-**Locked (2026-07-11):** replaces the flat scroll model from Piece 2. Every transition —
-gallery → About, About → Skills & Certs, and so on through all 5 sections — stacks
-sequentially, book-style, rather than scrolling the outgoing section off-screen.
+**Locked (2026-07-11), corrected (2026-07-11):** the first Piece 2b build scaled the
+outgoing section down (`1.0` → `0.94`) while dimming it, which reads as the page *moving
+away* rather than staying put. That's not the intended effect — corrected spec below removes
+scale entirely.
+
+Every transition — gallery → About, About → Skills & Certs, and so on through all 5 sections
+— stacks sequentially, book-style, rather than scrolling the outgoing section off-screen.
 
 **Behavior:**
-- Each section (including the gallery hero) is pinned in place (`position: sticky` or a
-  GSAP ScrollTrigger pin) as the next one scrolls up and over it.
-- As the incoming section covers the one beneath, the outgoing section gets a **classic
-  parallax treatment**: scales down slightly (e.g. `0.92`–`0.96`) and dims (reduced
-  brightness/opacity, e.g. `brightness(0.6)` and/or `opacity: 0.7`) so it visually recedes
-  like a page being turned under the next one, not just clipped away.
+- Each section (including the gallery hero) pins in place (`position: sticky` or a GSAP
+  ScrollTrigger pin) and **stays exactly where it is, at full size, for the rest of the
+  scroll** — no scale transform, no repositioning, no shrinking.
+- As the next section scrolls up and covers it, the outgoing section **dims in place**
+  (reduced brightness/opacity, e.g. `brightness(0.6)` and/or `opacity: ~0.7`) — the only
+  change to the outgoing section is dimness. It should feel like a page going dull under a
+  new page laid on top of it, not a page zooming backward.
+- The incoming section slides up from below and physically covers the dimmed section
+  underneath — the stack effect comes entirely from the covering + dimming, not from any
+  motion or scale on the section being left behind.
 - This applies uniformly across the whole scroll sequence: Gallery → About → Skills & Certs
   → Projects → Experience → Domains of Study, each stacking on the last.
 - Sections keep their existing per-section identity (yellowed paper background, crumpled
   texture overlay) — the stack effect governs the *transition*, not the section styling
   itself.
-- The existing Zustand `currentSection` + Intersection Observer + URL sync (from Piece 2 /
-  Piece 1 Revisions Part 3) stays as the source of truth for which section is "active";
-  the stack is a visual layer on top of that, not a replacement for the state model.
+- The existing Zustand `currentSection` + Intersection Observer + URL sync stays as the
+  source of truth for which section is "active"; the stack is a visual layer on top of that,
+  not a replacement for the state model.
 - "Return to Gallery" (and any future terminal `cd` commands) should reverse cleanly through
-  the stack rather than jumping — i.e. scrolling back up un-stacks sections in reverse order.
+  the stack rather than jumping — i.e. scrolling back up un-stacks sections in reverse order,
+  and previously-dimmed sections should brighten back up as they're revealed.
 
 **Technical approach:**
-- Primary candidate: GSAP ScrollTrigger with `pin: true` per section, animating the outgoing
-  section's `scale`/`filter`/`opacity` as the next section's scroll progress increases,
-  layered with the existing Lenis smooth-scroll setup.
-- Alternative: CSS `position: sticky` sections with scroll-linked transforms driven by
-  Intersection Observer ratios (less GSAP dependency, more manual math) — use if
-  ScrollTrigger + Lenis pinning proves fragile in practice.
+- Primary candidate: GSAP ScrollTrigger with `pin: true` per section, animating only the
+  outgoing section's `filter`/`opacity` (no `scale`/`transform`) as the next section's scroll
+  progress increases, layered with the existing Lenis smooth-scroll setup.
+- Alternative: CSS `position: sticky` sections with scroll-linked filter/opacity driven by
+  Intersection Observer ratios or a Lenis scroll listener — this is what was actually used
+  in the first build; keep this approach, just drop the scale transform from it.
 - Whichever approach is used, it needs to coexist with the existing `isProgrammatic`
-  scroll-flag pattern (from Piece 1 Revisions Part 3) so "Return to Gallery" / future
-  terminal navigation don't fight the pin/stack animation.
+  scroll-flag pattern so "Return to Gallery" / future terminal navigation don't fight the
+  pin/stack animation.
 
 **Deferred to later pieces (do not build now):**
 - Paper ball unfold animation (Piece 3b) will need to be re-checked against this stack
