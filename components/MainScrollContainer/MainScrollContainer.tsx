@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Lenis from "lenis";
 import { useNavigationStore, SectionId } from "@/store/navigationStore";
 import GalleryScene from "@/components/Gallery/GalleryScene";
+import Footer from "@/components/Footer/Footer";
 import styles from "./MainScrollContainer.module.css";
 
 interface SectionData {
@@ -64,7 +65,7 @@ export default function MainScrollContainer() {
       gestureOrientation: "vertical",
     });
 
-    lenisRef.ref = lenis; // Keep ref updated
+    lenisRef.current = lenis; // Keep ref updated
 
     function raf(time: number) {
       lenis.raf(time);
@@ -127,12 +128,12 @@ export default function MainScrollContainer() {
   // Initial scroll-to if section route is loaded directly
   useEffect(() => {
     const initialSlug = params.section as string;
-    if (initialSlug && lenisRef.ref) {
+    if (initialSlug && lenisRef.current) {
       const targetEl = document.getElementById(`section-${initialSlug}`);
       if (targetEl) {
         // Delay slightly to ensure layout / images are fully rendered
         setTimeout(() => {
-          lenisRef.ref?.scrollTo(targetEl, { immediate: true });
+          lenisRef.current?.scrollTo(targetEl, { immediate: true });
         }, 150);
       }
     }
@@ -140,7 +141,7 @@ export default function MainScrollContainer() {
 
   // Trigger smooth scroll when currentSection is updated programmatically (e.g. paper ball click)
   useEffect(() => {
-    if (!lenisRef.ref) return;
+    if (!lenisRef.current) return;
 
     const isProgrammatic = useNavigationStore.getState().isProgrammatic;
     if (!isProgrammatic) return;
@@ -149,7 +150,7 @@ export default function MainScrollContainer() {
       const heroEl = document.getElementById("gallery-hero");
       if (heroEl) {
         isScrollingRef.current = true;
-        lenisRef.ref.scrollTo(heroEl, {
+        lenisRef.current.scrollTo(heroEl, {
           onComplete: () => {
             isScrollingRef.current = false;
             useNavigationStore.getState().setProgrammatic(false);
@@ -161,7 +162,7 @@ export default function MainScrollContainer() {
       const targetEl = document.getElementById(`section-${currentSection}`);
       if (targetEl) {
         isScrollingRef.current = true;
-        lenisRef.ref.scrollTo(targetEl, {
+        lenisRef.current.scrollTo(targetEl, {
           onComplete: () => {
             isScrollingRef.current = false;
             useNavigationStore.getState().setProgrammatic(false);
@@ -196,6 +197,9 @@ export default function MainScrollContainer() {
             {/* Aged paper subtle shadow/burn overlay */}
             <div className={styles.paperTexture} />
 
+            {/* Crumpled paper texture overlay */}
+            <div className={styles.paperCrumple} />
+
             <div className={styles.paperContent}>
               {/* Terminal command style trace */}
               <p className={styles.prompt}>
@@ -229,6 +233,9 @@ export default function MainScrollContainer() {
           </div>
         </section>
       ))}
+
+      {/* ── Footer ── */}
+      <Footer />
     </div>
   );
 }

@@ -72,10 +72,19 @@ export default function GalleryScene() {
       {/* ── Layer 2: CSS spotlight cone over the statue ── */}
       <div className={styles.spotlight} aria-hidden="true" />
 
+      {/* ── Layer 2b: Hero Name (Top-left display) ── */}
+      <h1 className={styles.heroName}>
+        Zeeshaan
+        <br />
+        Suhail
+        <br />
+        Shaik
+      </h1>
+
       {/* ── Layer 3: Statue (plain image for Piece 1 — no ASCII split yet) ── */}
       <div className={styles.statueWrapper}>
         <Image
-          src="/assets/statue.png"
+          src="/assets/statue/statue.png"
           alt="Classical Greek marble statue on a pedestal"
           width={500}
           height={750}
@@ -97,6 +106,23 @@ export default function GalleryScene() {
           size={ball.size}
         />
       ))}
+
+      {/* ── Layer 4b: Resume Scroll (clickable right wall element) ── */}
+      <a
+        href="/resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.resumeScroll}
+        title="Open Resume"
+      >
+        <Image
+          src="/assets/resume-scroll.png"
+          alt="Aged scroll representing resume"
+          width={120}
+          height={120}
+          className={styles.resumeScrollImage}
+        />
+      </a>
 
       {/* ── Layer 5: Film-grain overlay (topmost, no pointer events) ── */}
       <GrainOverlay />

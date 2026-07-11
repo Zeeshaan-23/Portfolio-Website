@@ -6,12 +6,22 @@
 |---|---|---|---|
 | 1 | Static gallery layout (statue, spotlight, paper balls) | Core UX skeleton | ✅ |
 | 2 | Scroll-based section navigation + fullscreen layout | Smooth scrolling & layout stubs | ✅ |
+| 2a| Gallery enhancements (hero name, texture, footer) | Visual polish on hero & sections | ✅ |
 | 3 | Terminal component wired to same nav state | Second nav method works | ⬜ |
 | 4 | Crack SVG + binary MotionPath animation | Hero animation layer 1 | ⬜ |
 | 5 | ASCII-split statue effect (Three.js) | Hero animation layer 2 (hardest, do last) | ⬜ |
 | 6 | Mobile fallback (pre-rendered statue image/video instead of live Three.js, `prefers-reduced-motion` check) | Perf/accessibility pass | ⬜ |
 
 ## Changelog
+
+### 2026-07-11 (Piece 2a Revisions)
+- Implemented **Hero Name**: Added a three-line, monospace display ("Zeeshaan Suhail Shaik") in the top-left quadrant of the gallery scene with an acid-green text glow (`#39ff14`).
+- Implemented **Crumpled Paper Background Overlay**: Configured a `paperCrumple` overlay for all 5 fullscreen page sections using `/assets/textures/paper-crumple.png` with a `multiply` blend-mode, `0.15` opacity, and custom CSS color-shift filter.
+- Implemented **Resume Scroll Link**: Positioned a clickable resume scroll sprite on the right wall of the gallery, matching the paper balls in visual scale, with a hover scale/glow transition linking to the `/resume.pdf` file.
+- Created **Monospace Footer**: Built a minimal, monospace three-column footer at the bottom of the page containing contact info, git/linkedin links (text-only hover glowing `[github]` and `[linkedin]`), and shell/comment style metadata.
+- Fixed a pre-existing type compilation warning in `MainScrollContainer.tsx` where `.ref` was used instead of `.current` on React `useRef` hooks.
+
+### 2026-07-10 (Piece 1 Revisions Part 3)
 
 ### 2026-07-09
 - Scaffolded App Router project directly in root workspace.

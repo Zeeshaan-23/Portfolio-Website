@@ -61,6 +61,19 @@
   z-index: 1;
 }
 
+/* Crumpled paper texture overlay */
+.paperCrumple {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('/assets/textures/paper-crumple.png');
+  background-size: cover;
+  mix-blend-mode: multiply;
+  opacity: 0.15;
+  filter: hue-rotate(40deg) saturate(0.6) brightness(1.2);
+  z-index: 1;
+}
+
 .paperContent {
   position: relative;
   z-index: 2;

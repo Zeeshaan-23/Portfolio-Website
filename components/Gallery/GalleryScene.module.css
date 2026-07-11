@@ -79,3 +79,69 @@
     height: auto !important;
   }
 }
+
+/* ── Hero Name display ── */
+.heroName {
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+  z-index: 4;
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  text-shadow: 0 0 8px var(--color-accent), 0 0 16px rgba(57, 255, 20, 0.4);
+  margin: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .heroName {
+    top: 1.5rem;
+    left: 1.5rem;
+  }
+}
+
+/* ── Resume Scroll ── */
+.resumeScroll {
+  position: absolute;
+  right: 12%;
+  bottom: 45%;
+  z-index: 4;
+  display: block;
+  cursor: pointer;
+  transition: transform 200ms ease, filter 200ms ease;
+  outline: none;
+}
+
+.resumeScrollImage {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 125px;
+  /* Match ambient gallery lighting */
+  filter: brightness(0.7) contrast(0.9) saturate(0.8);
+  transition: filter 200ms ease;
+}
+
+.resumeScroll:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px var(--color-accent));
+}
+
+.resumeScroll:hover .resumeScrollImage {
+  filter: brightness(0.9) contrast(1.0) saturate(1.0);
+}
+
+@media (max-width: 768px) {
+  .resumeScroll {
+    right: 8%;
+    bottom: 50%;
+  }
+  .resumeScrollImage {
+    max-width: 90px;
+  }
+}
+
