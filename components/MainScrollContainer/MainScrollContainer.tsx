@@ -56,8 +56,12 @@ export default function MainScrollContainer() {
 
   const lenisRef = useRef<Lenis | null>(null);
   const isScrollingRef = useRef(false);
+  
+  // Custom inner container DOM refs for scroll stack animations
+  const heroInnerRef = useRef<HTMLDivElement>(null);
+  const sectionInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Initialize Lenis smooth scroll
+  // Initialize Lenis smooth scroll & setup scroll stack animation listener
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -73,12 +77,52 @@ export default function MainScrollContainer() {
     }
     requestAnimationFrame(raf);
 
-    // Expose lenis instance globally for scroll-to events
+    // Expose lenis instance globally for scroll-to-element calls
     (window as any).lenis = lenis;
+
+    // Handle book-style scroll stack transitions (scale down & dim outgoing sections)
+    const handleScroll = () => {
+      const scrollY = lenis.scroll;
+      const vh = window.innerHeight || 1;
+
+      // 1. Gallery Hero Inner Section (index 0)
+      if (heroInnerRef.current) {
+        const p = Math.max(0, Math.min(1, scrollY / vh));
+        const scale = 1 - p * 0.06;      // Scale 1.0 -> 0.94
+        const brightness = 1 - p * 0.4;  // Dim brightness 1.0 -> 0.6
+        const opacity = 1 - p * 0.3;     // Dim opacity 1.0 -> 0.7
+        
+        heroInnerRef.current.style.transform = `scale(${scale})`;
+        heroInnerRef.current.style.filter = `brightness(${brightness})`;
+        heroInnerRef.current.style.opacity = `${opacity}`;
+      }
+
+      // 2. Fullscreen Document Sections (indices 1 to SECTIONS.length)
+      SECTIONS.forEach((sec, idx) => {
+        const el = sectionInnerRefs.current[idx];
+        if (el) {
+          const startScroll = (idx + 1) * vh;
+          const p = Math.max(0, Math.min(1, (scrollY - startScroll) / vh));
+          const scale = 1 - p * 0.06;      // Scale 1.0 -> 0.94
+          const brightness = 1 - p * 0.4;  // Dim brightness 1.0 -> 0.6
+          const opacity = 1 - p * 0.3;     // Dim opacity 1.0 -> 0.7
+          
+          el.style.transform = `scale(${scale})`;
+          el.style.filter = `brightness(${brightness})`;
+          el.style.opacity = `${opacity}`;
+        }
+      });
+    };
+
+    lenis.on("scroll", handleScroll);
+    
+    // Initial run after layout calculations complete
+    const timer = setTimeout(handleScroll, 100);
 
     return () => {
       lenis.destroy();
       delete (window as any).lenis;
+      clearTimeout(timer);
     };
   }, []);
 
@@ -181,19 +225,28 @@ export default function MainScrollContainer() {
   return (
     <div className={styles.container}>
       {/* ── Gallery Hero Section (100vh) ── */}
-      <section id="gallery-hero" className={styles.heroSection}>
-        <GalleryScene />
+      <section id="gallery-hero" className={styles.heroSection} style={{ zIndex: 1 }}>
+        <div ref={heroInnerRef} style={{ width: "100%", height: "100%", willChange: "transform, filter, opacity" }}>
+          <GalleryScene />
+        </div>
       </section>
 
       {/* ── Individual Full-Screen Sections Stacked Vertically ── */}
-      {SECTIONS.map((sec) => (
+      {SECTIONS.map((sec, idx) => (
         <section
           key={sec.id}
           id={`section-${sec.id}`}
           className={styles.sectionPage}
+          style={{ zIndex: idx + 2 }}
         >
           {/* Scroll depth grounding: Cream paper panel */}
-          <div className={styles.paperSheet}>
+          <div
+            ref={(el) => {
+              sectionInnerRefs.current[idx] = el;
+            }}
+            className={styles.paperSheet}
+            style={{ willChange: "transform, filter, opacity" }}
+          >
             {/* Aged paper subtle shadow/burn overlay */}
             <div className={styles.paperTexture} />
 

@@ -28,7 +28,8 @@ the section background, bridging gallery and content.
 | Marble / statue | Off-white cream `#e8e2d4` | |
 | Paper (old library) | Yellowed cream `#e6dcc0` | Page backgrounds |
 | Ink / body text | Near-black `#1c1a17` | |
-| Accent (terminal / glow) | Acid green `#39ff14` | Hero name glow, cursor, binary stream, spotlight glow, hover states |
+| Accent (terminal / glow) | Acid green `#39ff14` | Cursor, binary stream, spotlight glow, hover states, scrollbar thumb |
+| Accent, dimmed (hero name glow) | `#39ff14` at `brightness(0.65)` | Used only for the hero name text + glow, so it recedes behind the statue rather than competing as the brightest thing on screen |
 | Shadow / depth | `#111111` at low opacity | Gallery dimness |
 
 Rule of thumb: 90% neutral (concrete/marble/paper), 10% accent. The accent color is the
@@ -37,8 +38,8 @@ cracks, ASCII glitch, hero name, hover states).
 
 ### Typography
 - **Section headers:** distressed classical serif — *Special Elite* or *IM Fell English* (Google Fonts)
-- **Body / UI / terminal / hero name:** monospace — *JetBrains Mono* or *IBM Plex Mono*
-- Two fonts only. No third typeface.
+- **Body / UI / terminal:** monospace — *JetBrains Mono* or *IBM Plex Mono*
+- **Hero name only (exception, locked 2026-07-11):** *Minecraft.ttf* (local font, `public/fonts/`), pixel/blocky style. Departs from the monospace-UI rule specifically for the hero name — reads as a "glitching digital signature" next to the ASCII/binary elements. Three fonts total now: Minecraft.ttf (hero name only) + one serif (section headers) + one mono (body/UI/terminal).
 
 ### Texture
 - Subtle film-grain / noise overlay across the whole viewport (SVG `feTurbulence`, low opacity)
@@ -47,7 +48,17 @@ cracks, ASCII glitch, hero name, hover states).
 - No drop shadows that look "digital-clean" — everything should feel slightly aged/rough
 
 ### Cursor
-- Default system cursor (explicitly NOT a custom cursor — keep it normal per spec)
+**Locked (2026-07-11):** custom thin crosshair cursor, global across the whole site (gallery + section pages), replacing the previous "default system cursor" decision.
+- **Shape:** thin (1px) crosshair — two short perpendicular lines with a small open gap at the center (not a solid plus-sign), roughly 20–24px square, hotspot at dead center
+- **Color:** acid green `#39ff14` — reuses the existing single accent rather than introducing a second color, so it stays visible against both the dark gallery scene and the cream paper sections. A subtle 1px dark stroke/halo (`rgba(17,17,17,0.6)`) around the green lines keeps it legible on the lighter paper backgrounds where pure green-on-cream has lower contrast.
+- **Hover / interactive state:** on clickable elements (paper balls, resume scroll, terminal, nav links) the crosshair gains a small filled center dot — a "targeting" cue that reads as "this is clickable" without switching to a generic system pointer that would break the aesthetic
+- **Implementation:** CSS `cursor: url(crosshair.svg) 12 12, crosshair;` (SVG data URI or file), with a second `crosshair-active.svg` for the `:hover` state on interactive elements. `crosshair` keyword as the fallback if the custom image fails to load — appropriate since it's already visually close to the intended shape.
+
+### Scrollbar
+**Locked (2026-07-11):** styled to match palette — the unstyled OS scrollbar (plain white) was breaking the aesthetic.
+- Track: near-black `#1c1a17` (matches ink/shadow tones)
+- Thumb: acid green `#39ff14`, dimmed to ~0.4 opacity at rest, full opacity on hover — kept dimmer than the terminal cursor/hero glow so it doesn't compete as the brightest accent element on screen
+- Implementation: `::-webkit-scrollbar` + friends (Chromium/Safari), `scrollbar-color` / `scrollbar-width: thin` (Firefox), in global CSS
 
 ---
 
@@ -76,7 +87,7 @@ cracks, ASCII glitch, hero name, hover states).
 4. Cracks (SVG path from pedestal base fanning across floor)
 5. Binary stream (chars animated along crack paths, upward, accent color)
 6. Paper balls (5 total — one per nav section), scattered floor positions
-7. Resume scroll (right side wall, prominently positioned, similar scale to paper balls)
+7. Resume scroll (right wall, `right: 4%` desktop, dimmed at rest via `brightness(0.45) saturate(0.80)`, brightens with acid-green glow on hover — links to `/resume.pdf`)
 8. Hero name (top-left, "Zeeshaan Suhail Shaik" in acid green monospace with text-shadow glow)
 9. Terminal window (floating, draggable or fixed, front-most)
 
@@ -99,7 +110,7 @@ Single source of truth: `currentSection` state (Zustand store).
 Three input methods, all write to the same state:
 - **Click** a paper ball → unfold animation (stop-motion style) → transition to section
 - **Terminal command** (`cd projects`, `ls`, `cat about`, `whoami`, `help`) → same transition
-- **Scroll** → scrolling past the gallery hero scrolls into section content, updates `currentSection`
+- **Scroll** → scrolling past the gallery hero scrolls into section content, updates `currentSection`. As of Piece 2b, this scroll is a sequential **stack transition** (see §14), not a flat scroll — each section stacks on top of the previous one, book-style.
 
 When a section opens via paper ball click: the clicked ball visually expands/unfolds (frame-by-frame
 animation or morphing) into the section's background, creating a visual bridge rather than a flat
@@ -120,7 +131,7 @@ fade. Body content fades in after unfold completes.
 - **Paper ball physics (optional polish):** Matter.js — subtle roll-on-hover only, last priority
 - **Draggable terminal (optional):** react-rnd or interact.js
 - **Parallax on photo frames:** vanilla-tilt.js
-- **Fonts:** Google Fonts — Special Elite / IM Fell English + JetBrains Mono / IBM Plex Mono
+- **Fonts:** Google Fonts — Special Elite / IM Fell English (section headers) + JetBrains Mono / IBM Plex Mono (body/UI/terminal); local font `Minecraft.ttf` in `public/fonts/` for the hero name only (see §2 Typography)
 
 ---
 
@@ -130,7 +141,8 @@ fade. Body content fades in after unfold completes.
 |---|---|---|---|
 | 1 | Static gallery layout (statue, spotlight, paper balls) | Core UX skeleton | ✅ |
 | 2 | Scroll-based section navigation + fullscreen layout | Smooth scrolling & layout stubs | ✅ |
-| 2a | Gallery enhancements (hero name, texture, footer) | Visual polish on hero & sections | ⬜ |
+| 2a | Gallery enhancements (hero name, texture, footer, cursor + scrollbar) | Visual polish on hero & sections | ✅ |
+| 2b | Scroll-stack / depth layering (gallery + all 5 sections stack sequentially) | Book-like scroll transition model | ⬜ |
 | 3 | Terminal component wired to same nav state | Third nav method works | ⬜ |
 | 3a | Section content & components (carousels, timeline) | Fill sections with interactive patterns | ⬜ |
 | 3b | Paper ball unfold transition animation | Visual bridge from gallery to section | ⬜ |
@@ -140,21 +152,23 @@ fade. Body content fades in after unfold completes.
 
 Mark status as pieces complete; keep this table updated in `BUILD_LOG.md`.
 
+> Note: `BUILD_LOG.md` is the authoritative, up-to-date status tracker. This table is a snapshot synced as of 2026-07-11 — check `BUILD_LOG.md` for anything more recent.
+
 ---
 
 ## 7. Hero Name Specification
 
-**Text:** "Zeeshaan Suhail Shaik"  
-**Position:** Top-left area of the gallery hero, occupying roughly the first quadrant (3×3 grid)  
-**Typography:** JetBrains Mono or IBM Plex Mono (monospace, matching UI font)  
-**Color:** Acid green `#39ff14`  
-**Size:** Large (~3rem–3.5rem, responsive), commanding but not pulling focus from the statue  
-**Styling:**
-- Letter-spacing: increase slightly (`0.05em`–`0.1em`) for a spread-out, intentional feel
-- Text-shadow glow: `text-shadow: 0 0 8px #39ff14, 0 0 16px rgba(57, 255, 20, 0.5)` (tune opacity/blur)
-- Positioning: `position: absolute; top: 2rem; left: 2rem` (adjust margins to match design)
-- Z-index: ensure it sits above statue but below terminal
-- Optional (future): subtle scan-line flicker on hover for CRT effect (deferred to Piece 3b or later)
+**As-built (2026-07-11, per Piece 2a Revisions Part 2 — supersedes the original single-line plan below):**
+- **Text:** stacked two lines — "Zeeshaan" / "Suhail Shaik" (separate `div` layers, not one string)
+- **Font:** Minecraft.ttf (local, `public/fonts/`) — see §2 Typography exception
+- **Position:** `left: 3.5rem` desktop / `left: 2rem` mobile; `top: 1.5em`. Second line indented `2ch` via left margin so "S" in "Suhail" sits under the midpoint of the two "e"s in "Zeeshaan"
+- **Color / glow:** acid green, dimmed to `brightness(0.65)` on both text and glow, color-matched to the floor-crack glow (`#ccff62`-adjacent) rather than the terminal's full-brightness `#39ff14`
+- **Z-index:** `z-index: 1` — placed *behind* the statue (not above it as originally planned), with the header positioned so its bottom margin sits just above the statue's raised elbow
+
+**Original plan (superseded, kept for reference):**
+~~Single line "Zeeshaan Suhail Shaik" in JetBrains Mono, full-brightness `#39ff14`, `top: 2rem; left: 2rem`, z-index above statue but below terminal, letter-spacing `0.05em`–`0.1em`, text-shadow `0 0 8px #39ff14, 0 0 16px rgba(57, 255, 20, 0.5)`.~~ Replaced by the as-built spec above — the two-line stacked layout with the dimmed glow and behind-statue z-index reads better against the statue's raised arm and doesn't compete with the terminal as the brightest green element.
+
+- Optional (future, still open): subtle scan-line flicker on hover for CRT effect (deferred to Piece 3b or later)
 
 ---
 
@@ -262,22 +276,26 @@ real content, not placeholder.
 - [ ] Photo frame contents (tech stack icons/logos) for back wall
 - [x] Statue with ground-lit green glow (transparent background)
 - [x] 5x crumpled paper ball sprites (scattered positioning complete)
-- [ ] Resume scroll sprite (wall-mounted decoration, transparent background)
-- [ ] Crumpled paper texture overlay (for section backgrounds)
+- [x] Resume scroll sprite (wall-mounted, linked to `/resume.pdf`)
+- [x] Crumpled paper texture overlay (`/assets/textures/paper-crumple.png`, multiply blend, 0.15 opacity)
 - [ ] Torn-edge mask/PNG (for section edges) — optional, may use clip-path instead
 - [ ] Animated sprites for timeline (Experience section) — pending research & generation
 - [x] Resume PDF file (`/public/resume.pdf`)
+- [x] Minecraft.ttf local font file (`public/fonts/`) — hero name only
+- [ ] Custom cursor SVG(s) — crosshair default + crosshair-active hover state (see §2 Cursor)
 
 ---
 
 ## 12. Decisions (locked)
 - **Accent color:** acid green `#39ff14`
-- **Statue:** 2D for now (see §9 for approach)
+- **Statue:** 2D for now (see §13 for approach)
 - **Framework:** Next.js (App Router)
-- **Hero name font:** Monospace (JetBrains Mono / IBM Plex Mono), acid green, top-left
+- **Hero name font:** Minecraft.ttf (local), dimmed acid-green glow (`brightness(0.65)`), two-line stacked, z-index behind statue — see §7
 - **Carousels:** Swiper.js or Framer Motion, auto-scroll on idle + manual buttons
 - **Timeline:** Horizontal, with animated sprite support (sprites TBD)
-- **Footer:** Monospace, minimal, museum/cyber aesthetic
+- **Footer:** Monospace, minimal, museum/cyber aesthetic — built, see `BUILD_LOG.md`
+- **Cursor:** custom thin acid-green crosshair, global, with filled-center-dot hover state on interactive elements — see §2
+- **Scrollbar:** styled to match palette — near-black track, dimmed acid-green thumb — see §2
 
 ---
 
@@ -321,3 +339,45 @@ Use with Midjourney, DALL-E, or SDXL/Stable Diffusion:
 ```
 /public/assets/statue/statue.png       ← the single source image, transparent bg preferred
 ```
+
+---
+
+## 14. Scroll Stack / Depth Layering (Piece 2b)
+
+**Locked (2026-07-11):** replaces the flat scroll model from Piece 2. Every transition —
+gallery → About, About → Skills & Certs, and so on through all 5 sections — stacks
+sequentially, book-style, rather than scrolling the outgoing section off-screen.
+
+**Behavior:**
+- Each section (including the gallery hero) is pinned in place (`position: sticky` or a
+  GSAP ScrollTrigger pin) as the next one scrolls up and over it.
+- As the incoming section covers the one beneath, the outgoing section gets a **classic
+  parallax treatment**: scales down slightly (e.g. `0.92`–`0.96`) and dims (reduced
+  brightness/opacity, e.g. `brightness(0.6)` and/or `opacity: 0.7`) so it visually recedes
+  like a page being turned under the next one, not just clipped away.
+- This applies uniformly across the whole scroll sequence: Gallery → About → Skills & Certs
+  → Projects → Experience → Domains of Study, each stacking on the last.
+- Sections keep their existing per-section identity (yellowed paper background, crumpled
+  texture overlay) — the stack effect governs the *transition*, not the section styling
+  itself.
+- The existing Zustand `currentSection` + Intersection Observer + URL sync (from Piece 2 /
+  Piece 1 Revisions Part 3) stays as the source of truth for which section is "active";
+  the stack is a visual layer on top of that, not a replacement for the state model.
+- "Return to Gallery" (and any future terminal `cd` commands) should reverse cleanly through
+  the stack rather than jumping — i.e. scrolling back up un-stacks sections in reverse order.
+
+**Technical approach:**
+- Primary candidate: GSAP ScrollTrigger with `pin: true` per section, animating the outgoing
+  section's `scale`/`filter`/`opacity` as the next section's scroll progress increases,
+  layered with the existing Lenis smooth-scroll setup.
+- Alternative: CSS `position: sticky` sections with scroll-linked transforms driven by
+  Intersection Observer ratios (less GSAP dependency, more manual math) — use if
+  ScrollTrigger + Lenis pinning proves fragile in practice.
+- Whichever approach is used, it needs to coexist with the existing `isProgrammatic`
+  scroll-flag pattern (from Piece 1 Revisions Part 3) so "Return to Gallery" / future
+  terminal navigation don't fight the pin/stack animation.
+
+**Deferred to later pieces (do not build now):**
+- Paper ball unfold animation (Piece 3b) will need to be re-checked against this stack
+  model once both exist, since it also animates the gallery → section transition — Piece 3b
+  should build *on top of* the stack model established here, not compete with it.

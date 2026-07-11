@@ -6,13 +6,21 @@
 |---|---|---|---|
 | 1 | Static gallery layout (statue, spotlight, paper balls) | Core UX skeleton | ✅ |
 | 2 | Scroll-based section navigation + fullscreen layout | Smooth scrolling & layout stubs | ✅ |
-| 2a| Gallery enhancements (hero name, texture, footer) | Visual polish on hero & sections | ✅ |
+| 2a| Gallery enhancements (hero name, texture, footer, cursor + scrollbar) | Visual polish on hero & sections | ✅ |
+| 2b| Scroll-stack / depth layering (gallery + all 5 sections stack sequentially) | Book-like scroll transition model | ✅ |
 | 3 | Terminal component wired to same nav state | Second nav method works | ⬜ |
 | 4 | Crack SVG + binary MotionPath animation | Hero animation layer 1 | ⬜ |
 | 5 | ASCII-split statue effect (Three.js) | Hero animation layer 2 (hardest, do last) | ⬜ |
 | 6 | Mobile fallback (pre-rendered statue image/video instead of live Three.js, `prefers-reduced-motion` check) | Perf/accessibility pass | ⬜ |
 
 ## Changelog
+
+### 2026-07-11 (Piece 2b: Scroll Stack)
+- Implemented **Scroll Stack / Depth Layering**:
+  * Configured CSS Sticky Stacking (`position: sticky; top: 0;`) and ordered `z-index` stacking values across the landing hero and all section pages.
+  * Tied scale, brightness, and opacity transitions of inner sheet elements to active scroll offsets using a custom DOM-ref-linked Lenis event listener.
+  * Achieved high-performance depth-layering transitions (scaling from `1.0` to `0.94`, dimming to `0.6` brightness and `0.7` opacity) without triggering React component re-renders.
+  * Preserved full functionality of Zustand state sync, Intersection Observer URLs, and programmatic scrolling targets.
 
 ### 2026-07-11 (Piece 2a Revisions Part 2)
 - Refined **Hero Name**: 
