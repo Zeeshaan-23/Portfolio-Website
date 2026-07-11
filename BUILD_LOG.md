@@ -14,6 +14,10 @@
 
 ## Changelog
 
+### 2026-07-11 (Piece 2a Revisions Part 2)
+- Refined **Hero Name**: Stacked text into two lines ("Zeeshaan" and "Suhail Shaik"), set it to start from the left edge (`left: 0`), increased size to a very large responsive `~7rem-8rem` (`clamp(3.5rem, 8.5vw, 8rem)`), set line-height to a tight `0.9`, and layered it behind the statue (`z-index: 1`).
+- Refined **Resume Scroll**: Positioned the scroll closer to the right viewport edge (`right: 4%` on desktop), applied rest dimming filter (`brightness(0.70) saturate(0.85)`), and set hover transition filters to include a slight brightening and acid-green drop-shadow glow.
+
 ### 2026-07-11 (Piece 2a Revisions)
 - Implemented **Hero Name**: Added a three-line, monospace display ("Zeeshaan Suhail Shaik") in the top-left quadrant of the gallery scene with an acid-green text glow (`#39ff14`).
 - Implemented **Crumpled Paper Background Overlay**: Configured a `paperCrumple` overlay for all 5 fullscreen page sections using `/assets/textures/paper-crumple.png` with a `multiply` blend-mode, `0.15` opacity, and custom CSS color-shift filter.
