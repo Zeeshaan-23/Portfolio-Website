@@ -15,7 +15,13 @@
 ## Changelog
 
 ### 2026-07-11 (Piece 2a Revisions Part 2)
-- Refined **Hero Name**: Stacked text into two lines ("Zeeshaan" and "Suhail Shaik"), set it to start from the left edge (`left: 0`), shifted it down by approximately one line height (`top: 0.9em`), increased size to a very large responsive `~7rem-8rem` (`clamp(3.5rem, 8.5vw, 8rem)`), set line-height to a tight `0.9`, and layered it behind the statue (`z-index: 1`).
+- Refined **Hero Name**: 
+  * Stacked text into two lines ("Zeeshaan" and "Suhail Shaik") and wrapped them in distinct `div` layers.
+  * Shifted the name rightward (`left: 3.5rem` on desktop, `left: 2rem` on mobile) to introduce padding from the viewport margin.
+  * Indented the second line by `2ch` using a left margin, aligning the "S" in "Suhail" directly under the midpoint boundary of the first and second "e" in "Zeeshaan".
+  * Integrated **Minecraft.ttf** local font (added to `public/fonts/`) and updated CSS variables/declarations.
+  * Dimmed the hero name and its text glow to `brightness(0.65)` for a smoother visual style.
+  * Placed the header behind the statue (`z-index: 1`) and shifted it down (`top: 0.9em`).
 - Refined **Resume Scroll**: Positioned the scroll closer to the right viewport edge (`right: 4%` on desktop), dimmed it further at rest (`filter: brightness(0.45) saturate(0.80)`) to blend deep into the wall lighting, and set hover transition filters to include a slight brightening and acid-green drop-shadow glow.
 
 ### 2026-07-11 (Piece 2a Revisions)
