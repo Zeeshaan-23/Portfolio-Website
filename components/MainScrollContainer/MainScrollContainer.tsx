@@ -173,11 +173,12 @@ export default function MainScrollContainer() {
   useEffect(() => {
     const initialSlug = params.section as string;
     if (initialSlug && lenisRef.current) {
-      const targetEl = document.getElementById(`section-${initialSlug}`);
-      if (targetEl) {
+      const index = SECTIONS.findIndex((s) => s.id === initialSlug);
+      if (index !== -1) {
+        const targetScroll = (index + 1) * window.innerHeight;
         // Delay slightly to ensure layout / images are fully rendered
         setTimeout(() => {
-          lenisRef.current?.scrollTo(targetEl, { immediate: true });
+          lenisRef.current?.scrollTo(targetScroll, { immediate: true });
         }, 150);
       }
     }
@@ -191,22 +192,20 @@ export default function MainScrollContainer() {
     if (!isProgrammatic) return;
 
     if (currentSection === null) {
-      const heroEl = document.getElementById("gallery-hero");
-      if (heroEl) {
-        isScrollingRef.current = true;
-        lenisRef.current.scrollTo(heroEl, {
-          onComplete: () => {
-            isScrollingRef.current = false;
-            useNavigationStore.getState().setProgrammatic(false);
-            window.history.pushState(null, "", "/");
-          },
-        });
-      }
+      isScrollingRef.current = true;
+      lenisRef.current.scrollTo(0, {
+        onComplete: () => {
+          isScrollingRef.current = false;
+          useNavigationStore.getState().setProgrammatic(false);
+          window.history.pushState(null, "", "/");
+        },
+      });
     } else {
-      const targetEl = document.getElementById(`section-${currentSection}`);
-      if (targetEl) {
+      const index = SECTIONS.findIndex((s) => s.id === currentSection);
+      if (index !== -1) {
+        const targetScroll = (index + 1) * window.innerHeight;
         isScrollingRef.current = true;
-        lenisRef.current.scrollTo(targetEl, {
+        lenisRef.current.scrollTo(targetScroll, {
           onComplete: () => {
             isScrollingRef.current = false;
             useNavigationStore.getState().setProgrammatic(false);
