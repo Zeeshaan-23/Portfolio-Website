@@ -6,8 +6,10 @@ import PaperBall from "@/components/PaperBall/PaperBall";
 import GrainOverlay from "@/components/GrainOverlay/GrainOverlay";
 import styles from "./GalleryScene.module.css";
 
-const LINE1_TARGET = "Zeeshaan";
-const LINE2_TARGET = "Suhail Shaik";
+const TEXT_SETS = [
+  { line1: "Zeeshaan", line2: "Suhail Shaik" },
+  { line1: "Learning fast.", line2: "Building faster." },
+];
 
 /**
  * 5 nav sections — each maps to a paper ball sprite + floor position.
@@ -62,21 +64,30 @@ export default function GalleryScene() {
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
   const [activeLine, setActiveLine] = useState<1 | 2>(1);
+  const [ariaLabel, setAriaLabel] = useState("Zeeshaan Suhail Shaik");
 
   useEffect(() => {
     let isCancelled = false;
     let timer: NodeJS.Timeout;
+    let currentSetIndex = 0;
 
     const runLoop = async () => {
-      // Step 1: Type line 1 ("Zeeshaan")
+      const currentSet = TEXT_SETS[currentSetIndex];
+      const target1 = currentSet.line1;
+      const target2 = currentSet.line2;
+
+      // Update screen reader text to match current set
+      setAriaLabel(`${target1} ${target2}`);
+
+      // Step 1: Type line 1
       setActiveLine(1);
       setText2("");
-      for (let i = 0; i <= LINE1_TARGET.length; i++) {
+      for (let i = 0; i <= target1.length; i++) {
         if (isCancelled) return;
-        setText1(LINE1_TARGET.slice(0, i));
-        if (i < LINE1_TARGET.length) {
+        setText1(target1.slice(0, i));
+        if (i < target1.length) {
           await new Promise((resolve) => {
-            timer = setTimeout(resolve, 80);
+            timer = setTimeout(resolve, 120); // Decreased speed: ~120ms per character
           });
         }
       }
@@ -87,15 +98,15 @@ export default function GalleryScene() {
         timer = setTimeout(resolve, 300);
       });
 
-      // Step 3: Type line 2 ("Suhail Shaik")
+      // Step 3: Type line 2
       if (isCancelled) return;
       setActiveLine(2);
-      for (let i = 0; i <= LINE2_TARGET.length; i++) {
+      for (let i = 0; i <= target2.length; i++) {
         if (isCancelled) return;
-        setText2(LINE2_TARGET.slice(0, i));
-        if (i < LINE2_TARGET.length) {
+        setText2(target2.slice(0, i));
+        if (i < target2.length) {
           await new Promise((resolve) => {
-            timer = setTimeout(resolve, 80);
+            timer = setTimeout(resolve, 120); // Decreased speed: ~120ms per character
           });
         }
       }
@@ -109,9 +120,9 @@ export default function GalleryScene() {
       // Step 5: Delete "Suhail Shaik" (line 2 first)
       if (isCancelled) return;
       setActiveLine(2);
-      for (let i = LINE2_TARGET.length; i >= 0; i--) {
+      for (let i = target2.length; i >= 0; i--) {
         if (isCancelled) return;
-        setText2(LINE2_TARGET.slice(0, i));
+        setText2(target2.slice(0, i));
         if (i > 0) {
           await new Promise((resolve) => {
             timer = setTimeout(resolve, 50);
@@ -128,9 +139,9 @@ export default function GalleryScene() {
 
       // Step 7: Delete "Zeeshaan"
       if (isCancelled) return;
-      for (let i = LINE1_TARGET.length; i >= 0; i--) {
+      for (let i = target1.length; i >= 0; i--) {
         if (isCancelled) return;
-        setText1(LINE1_TARGET.slice(0, i));
+        setText1(target1.slice(0, i));
         if (i > 0) {
           await new Promise((resolve) => {
             timer = setTimeout(resolve, 50);
@@ -143,6 +154,9 @@ export default function GalleryScene() {
       await new Promise((resolve) => {
         timer = setTimeout(resolve, 600);
       });
+
+      // Switch to the next set in the cycle
+      currentSetIndex = (currentSetIndex + 1) % TEXT_SETS.length;
 
       if (!isCancelled) {
         runLoop();
@@ -175,7 +189,7 @@ export default function GalleryScene() {
       <div className={styles.spotlight} aria-hidden="true" />
 
       {/* ── Layer 2b: Hero Name (Top-left display) ── */}
-      <h1 className={styles.heroName} aria-label="Zeeshaan Suhail Shaik">
+      <h1 className={styles.heroName} aria-label={ariaLabel}>
         <div aria-hidden="true">
           {text1 || "\u200b"}
           {activeLine === 1 && <span className={styles.cursor} />}

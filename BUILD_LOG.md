@@ -16,12 +16,14 @@
 ## Changelog
 
 ### 2026-07-12 (Piece 2a Revisions Part 4: Hero Name Typewriter Animation)
-- Implemented **Hero Name Typewriter Animation**:
-  * Created a custom React `useEffect` typing loop with custom `setTimeout` pacing to sequentially type and delete "Zeeshaan" and "Suhail Shaik".
-  * Sequence: type line 1 (~80ms/char), pause (300ms), type line 2 (~80ms/char), hold complete (1.8s), delete line 2 (~50ms/char), pause (300ms), delete line 1 (~50ms/char), pause empty (600ms), and loop.
-  * Added a CSS-styled `.cursor` with blink animation that attaches dynamically to the end of the active text line, continuing to blink through all pauses.
+- Implemented **Hero Name Typewriter Animation & Rotations**:
+  * Created a custom React `useEffect` typing loop with custom `setTimeout` pacing to sequentially type, hold, and delete text strings.
+  * Configured a rotation cycle alternating between Set 1: "Zeeshaan" (line 1) / "Suhail Shaik" (line 2), and Set 2: "Learning fast." (line 1) / "Building faster." (line 2).
+  * Sequence pacing: typing at **~120ms per character** (slower, per revisions request), hold complete for **~1.8s**, deletion at **~50ms per character**, and empty pause for **~600ms** between phases.
+  * Replaced the thin cursor with a **Linux-style block cursor** (`width: 0.12em` matching a period block thickness, `height: 0.45em` for half the text line height, aligned to the baseline) that blinks dynamically on the end of the active line.
   * Enforced layout stability by rendering zero-width spaces (`\u200b`) when strings are empty, preventing vertical element height collapse or shifting.
-  * Enhanced accessibility by adding `aria-label="Zeeshaan Suhail Shaik"` to the wrapper `h1` and `aria-hidden="true"` to inner animation blocks to support screen readers without reading the character-by-character typing loop.
+  * Enhanced accessibility by dynamically updating `aria-label` to match the active set's complete text, while keeping inner visual typewriter divs hidden from screen readers via `aria-hidden="true"`.
+
 
 ### 2026-07-11 (Piece 2b: Scroll Stack)
 - Implemented **Scroll Stack / Depth Layering**:

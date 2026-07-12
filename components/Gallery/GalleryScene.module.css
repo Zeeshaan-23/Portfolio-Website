@@ -108,11 +108,11 @@
 
 .cursor {
   display: inline-block;
-  width: 0.08em;
-  height: 0.85em;
+  width: 0.12em;
+  height: 0.45em;
   background-color: currentColor;
   margin-left: 0.05em;
-  vertical-align: middle;
+  vertical-align: baseline;
   animation: blink 1s step-start infinite;
 }
 
