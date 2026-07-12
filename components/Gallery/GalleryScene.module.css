@@ -104,6 +104,7 @@
 
 .quote {
   font-size: calc(var(--hero-name-font-size) * 0.8);
+  line-height: 1.1;
 }
 
 .secondLine {
