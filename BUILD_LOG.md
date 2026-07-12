@@ -22,6 +22,7 @@
   * Sequence pacing: typing at **~120ms per character** (slower, per revisions request), hold complete for **~1.8s**, deletion at **~50ms per character**, and empty pause for **~600ms** between phases.
   * Replaced the thin cursor with a **Linux-style block cursor** (`width: 0.12em` matching a period block thickness, `height: 0.45em` for half the text line height, aligned to the baseline) that blinks dynamically on the end of the active line.
   * Enforced layout stability by rendering zero-width spaces (`\u200b`) when strings are empty, preventing vertical element height collapse or shifting.
+  * Configured conditional second-line indentation (using separate CSS classes) so that the tagline "Building faster." starts left-aligned with no indent, while the name "Suhail Shaik" maintains its 2ch indent.
   * Enhanced accessibility by dynamically updating `aria-label` to match the active set's complete text, while keeping inner visual typewriter divs hidden from screen readers via `aria-hidden="true"`.
 
 

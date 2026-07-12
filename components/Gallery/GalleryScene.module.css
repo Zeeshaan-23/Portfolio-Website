@@ -103,6 +103,9 @@
 
 .secondLine {
   display: block;
+}
+
+.indented {
   margin-left: 2ch; /* Align S under the midpoint of the first and second 'e' in Zeeshaan */
 }
 

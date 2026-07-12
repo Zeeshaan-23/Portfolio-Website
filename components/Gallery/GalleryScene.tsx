@@ -7,8 +7,8 @@ import GrainOverlay from "@/components/GrainOverlay/GrainOverlay";
 import styles from "./GalleryScene.module.css";
 
 const TEXT_SETS = [
-  { line1: "Zeeshaan", line2: "Suhail Shaik" },
-  { line1: "Learning fast.", line2: "Building faster." },
+  { line1: "Zeeshaan", line2: "Suhail Shaik", indentSecondLine: true },
+  { line1: "Learning fast.", line2: "Building faster.", indentSecondLine: false },
 ];
 
 /**
@@ -65,6 +65,7 @@ export default function GalleryScene() {
   const [text2, setText2] = useState("");
   const [activeLine, setActiveLine] = useState<1 | 2>(1);
   const [ariaLabel, setAriaLabel] = useState("Zeeshaan Suhail Shaik");
+  const [indentSecondLine, setIndentSecondLine] = useState(true);
 
   useEffect(() => {
     let isCancelled = false;
@@ -78,6 +79,7 @@ export default function GalleryScene() {
 
       // Update screen reader text to match current set
       setAriaLabel(`${target1} ${target2}`);
+      setIndentSecondLine(currentSet.indentSecondLine);
 
       // Step 1: Type line 1
       setActiveLine(1);
@@ -194,7 +196,7 @@ export default function GalleryScene() {
           {text1 || "\u200b"}
           {activeLine === 1 && <span className={styles.cursor} />}
         </div>
-        <div className={styles.secondLine} aria-hidden="true">
+        <div className={`${styles.secondLine} ${indentSecondLine ? styles.indented : ""}`} aria-hidden="true">
           {text2 || "\u200b"}
           {activeLine === 2 && <span className={styles.cursor} />}
         </div>
