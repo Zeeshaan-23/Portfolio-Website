@@ -106,6 +106,22 @@
   margin-left: 2ch; /* Align S under the midpoint of the first and second 'e' in Zeeshaan */
 }
 
+.cursor {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.85em;
+  background-color: currentColor;
+  margin-left: 0.05em;
+  vertical-align: middle;
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .heroName {
     top: 1.5em;

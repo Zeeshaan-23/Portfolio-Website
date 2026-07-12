@@ -15,6 +15,14 @@
 
 ## Changelog
 
+### 2026-07-12 (Piece 2a Revisions Part 4: Hero Name Typewriter Animation)
+- Implemented **Hero Name Typewriter Animation**:
+  * Created a custom React `useEffect` typing loop with custom `setTimeout` pacing to sequentially type and delete "Zeeshaan" and "Suhail Shaik".
+  * Sequence: type line 1 (~80ms/char), pause (300ms), type line 2 (~80ms/char), hold complete (1.8s), delete line 2 (~50ms/char), pause (300ms), delete line 1 (~50ms/char), pause empty (600ms), and loop.
+  * Added a CSS-styled `.cursor` with blink animation that attaches dynamically to the end of the active text line, continuing to blink through all pauses.
+  * Enforced layout stability by rendering zero-width spaces (`\u200b`) when strings are empty, preventing vertical element height collapse or shifting.
+  * Enhanced accessibility by adding `aria-label="Zeeshaan Suhail Shaik"` to the wrapper `h1` and `aria-hidden="true"` to inner animation blocks to support screen readers without reading the character-by-character typing loop.
+
 ### 2026-07-11 (Piece 2b: Scroll Stack)
 - Implemented **Scroll Stack / Depth Layering**:
   * Configured CSS Sticky Stacking (`position: sticky; top: 0;`) and ordered `z-index` stacking values across the landing hero and all section pages.

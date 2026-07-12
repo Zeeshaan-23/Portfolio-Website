@@ -1,9 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import PaperBall from "@/components/PaperBall/PaperBall";
 import GrainOverlay from "@/components/GrainOverlay/GrainOverlay";
 import styles from "./GalleryScene.module.css";
+
+const LINE1_TARGET = "Zeeshaan";
+const LINE2_TARGET = "Suhail Shaik";
 
 /**
  * 5 nav sections — each maps to a paper ball sprite + floor position.
@@ -55,6 +59,104 @@ const PAPER_BALLS = [
 ] as const;
 
 export default function GalleryScene() {
+  const [text1, setText1] = useState("");
+  const [text2, setText2] = useState("");
+  const [activeLine, setActiveLine] = useState<1 | 2>(1);
+
+  useEffect(() => {
+    let isCancelled = false;
+    let timer: NodeJS.Timeout;
+
+    const runLoop = async () => {
+      // Step 1: Type line 1 ("Zeeshaan")
+      setActiveLine(1);
+      setText2("");
+      for (let i = 0; i <= LINE1_TARGET.length; i++) {
+        if (isCancelled) return;
+        setText1(LINE1_TARGET.slice(0, i));
+        if (i < LINE1_TARGET.length) {
+          await new Promise((resolve) => {
+            timer = setTimeout(resolve, 80);
+          });
+        }
+      }
+
+      // Step 2: Brief pause (~300ms)
+      if (isCancelled) return;
+      await new Promise((resolve) => {
+        timer = setTimeout(resolve, 300);
+      });
+
+      // Step 3: Type line 2 ("Suhail Shaik")
+      if (isCancelled) return;
+      setActiveLine(2);
+      for (let i = 0; i <= LINE2_TARGET.length; i++) {
+        if (isCancelled) return;
+        setText2(LINE2_TARGET.slice(0, i));
+        if (i < LINE2_TARGET.length) {
+          await new Promise((resolve) => {
+            timer = setTimeout(resolve, 80);
+          });
+        }
+      }
+
+      // Step 4: Full hold with both lines complete (~1.8s)
+      if (isCancelled) return;
+      await new Promise((resolve) => {
+        timer = setTimeout(resolve, 1800);
+      });
+
+      // Step 5: Delete "Suhail Shaik" (line 2 first)
+      if (isCancelled) return;
+      setActiveLine(2);
+      for (let i = LINE2_TARGET.length; i >= 0; i--) {
+        if (isCancelled) return;
+        setText2(LINE2_TARGET.slice(0, i));
+        if (i > 0) {
+          await new Promise((resolve) => {
+            timer = setTimeout(resolve, 50);
+          });
+        }
+      }
+
+      // Step 6: Brief pause (~300ms)
+      if (isCancelled) return;
+      setActiveLine(1);
+      await new Promise((resolve) => {
+        timer = setTimeout(resolve, 300);
+      });
+
+      // Step 7: Delete "Zeeshaan"
+      if (isCancelled) return;
+      for (let i = LINE1_TARGET.length; i >= 0; i--) {
+        if (isCancelled) return;
+        setText1(LINE1_TARGET.slice(0, i));
+        if (i > 0) {
+          await new Promise((resolve) => {
+            timer = setTimeout(resolve, 50);
+          });
+        }
+      }
+
+      // Step 8: Brief pause at fully empty (~600ms)
+      if (isCancelled) return;
+      await new Promise((resolve) => {
+        timer = setTimeout(resolve, 600);
+      });
+
+      if (!isCancelled) {
+        runLoop();
+      }
+    };
+
+    runLoop();
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <div className={styles.scene} id="gallery-scene">
       {/* ── Layer 1: Gallery background (wall + floor + built-in cracks) ── */}
@@ -73,9 +175,15 @@ export default function GalleryScene() {
       <div className={styles.spotlight} aria-hidden="true" />
 
       {/* ── Layer 2b: Hero Name (Top-left display) ── */}
-      <h1 className={styles.heroName}>
-        <div>Zeeshaan</div>
-        <div className={styles.secondLine}>Suhail Shaik</div>
+      <h1 className={styles.heroName} aria-label="Zeeshaan Suhail Shaik">
+        <div aria-hidden="true">
+          {text1 || "\u200b"}
+          {activeLine === 1 && <span className={styles.cursor} />}
+        </div>
+        <div className={styles.secondLine} aria-hidden="true">
+          {text2 || "\u200b"}
+          {activeLine === 2 && <span className={styles.cursor} />}
+        </div>
       </h1>
 
       {/* ── Layer 3: Statue (plain image for Piece 1 — no ASCII split yet) ── */}

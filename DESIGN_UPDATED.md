@@ -109,7 +109,7 @@ Single source of truth: `currentSection` state (Zustand store).
 
 Three input methods, all write to the same state:
 - **Click** a paper ball → unfold animation (stop-motion style) → transition to section
-- **Terminal command** (`cd projects`, `ls`, `cat about`, `whoami`, `help`) → same transition
+- **Terminal command** (`help`, `cd <section>`, `whoami` — minimal set for Piece 3, more commands added later) → same transition. Terminal starts minimized/closed; opens via clicking the back-wall painting trigger (see §15).
 - **Scroll** → scrolling past the gallery hero scrolls into section content, updates `currentSection`. As of Piece 2b, this scroll is a sequential **stack transition** (see §14), not a flat scroll — each section stacks on top of the previous one, book-style.
 
 When a section opens via paper ball click: the clicked ball visually expands/unfolds (frame-by-frame
@@ -129,7 +129,7 @@ fade. Body content fades in after unfold completes.
 - **Statue (current, 2D):** plain `<canvas>` + custom luminance-to-ASCII utility — see §9
 - **Spotlight:** CSS radial-gradient (2D)
 - **Paper ball physics (optional polish):** Matter.js — subtle roll-on-hover only, last priority
-- **Draggable terminal (optional):** react-rnd or interact.js
+- **Draggable terminal (locked 2026-07-11, Piece 3):** react-rnd or interact.js
 - **Parallax on photo frames:** vanilla-tilt.js
 - **Fonts:** Google Fonts — Special Elite / IM Fell English (section headers) + JetBrains Mono / IBM Plex Mono (body/UI/terminal); local font `Minecraft.ttf` in `public/fonts/` for the hero name only (see §2 Typography)
 
@@ -169,6 +169,39 @@ Mark status as pieces complete; keep this table updated in `BUILD_LOG.md`.
 ~~Single line "Zeeshaan Suhail Shaik" in JetBrains Mono, full-brightness `#39ff14`, `top: 2rem; left: 2rem`, z-index above statue but below terminal, letter-spacing `0.05em`–`0.1em`, text-shadow `0 0 8px #39ff14, 0 0 16px rgba(57, 255, 20, 0.5)`.~~ Replaced by the as-built spec above — the two-line stacked layout with the dimmed glow and behind-statue z-index reads better against the statue's raised arm and doesn't compete with the terminal as the brightest green element.
 
 - Optional (future, still open): subtle scan-line flicker on hover for CRT effect (deferred to Piece 3b or later)
+
+**Typewriter animation (locked 2026-07-11, Piece 2a Revisions Part 4):**
+- The hero name types itself in and deletes itself in a continuous terminal-style loop —
+  layered on top of the as-built static spec above, not a replacement for it (font, color,
+  position, z-index all stay as already specified).
+- **Sequence, in order:**
+  1. "Zeeshaan" types in character by character on line 1
+  2. Brief pause (~300ms)
+  3. "Suhail Shaik" types in character by character on line 2
+  4. Full hold with both lines complete (~1.8s)
+  5. "Suhail Shaik" deletes character by character (reverse of how it typed — line 2 first)
+  6. Brief pause (~300ms)
+  7. "Zeeshaan" deletes character by character
+  8. Brief pause at fully empty (~600ms), then loop back to step 1
+- **Speed:** ~80ms per character while typing, ~50ms per character while deleting (deleting
+  reads faster/snappier than typing, standard terminal-effect convention)
+- **Cursor:** a blinking thin vertical bar/block cursor, dimmed acid-green (matching the
+  hero text's `brightness(0.65)` glow), positioned at the end of whichever line is currently
+  being typed or deleted. Continues blinking during the pause states too (idle terminal
+  cursor blink), including at the fully-empty pause.
+- **Layout stability:** reserve the full two-line height/position from the start (i.e. line
+  2's container occupies its space even while empty during line-1 typing/step 8's pause) so
+  nothing shifts vertically as characters are added/removed — this matters here specifically
+  because the hero name sits directly behind the statue's raised elbow (`z-index: 1`,
+  per the positioning above), and any layout jump would visibly disturb that alignment.
+- **Implementation:** a small custom typewriter hook/effect (`setInterval`/`setTimeout`
+  chain or `requestAnimationFrame`, driven by React state) rather than a GSAP TextPlugin
+  dependency (TextPlugin requires a Club GreenSock license, avoid introducing that
+  requirement for this). Loop runs continuously — no interaction needed to trigger it.
+- **Note for later:** this animation should eventually be gated behind
+  `prefers-reduced-motion` as part of Piece 6 (mobile/accessibility pass) — not required now,
+  but keep the implementation simple enough that wrapping it in a reduced-motion check later
+  is a small change, not a rewrite.
 
 ---
 
@@ -291,11 +324,17 @@ real content, not placeholder.
 - **Statue:** 2D for now (see §13 for approach)
 - **Framework:** Next.js (App Router)
 - **Hero name font:** Minecraft.ttf (local), dimmed acid-green glow (`brightness(0.65)`), two-line stacked, z-index behind statue — see §7
+- **Hero name animation:** continuous typewriter loop — sequential type-in (line 1 then line 2), reverse-order delete (line 2 then line 1), blinking dimmed-green cursor — see §7
 - **Carousels:** Swiper.js or Framer Motion, auto-scroll on idle + manual buttons
 - **Timeline:** Horizontal, with animated sprite support (sprites TBD)
 - **Footer:** Monospace, minimal, museum/cyber aesthetic — built, see `BUILD_LOG.md`
 - **Cursor:** custom thin acid-green crosshair, global, with filled-center-dot hover state on interactive elements — see §2
 - **Scrollbar:** styled to match palette — near-black track, dimmed acid-green thumb — see §2
+- **Scroll stack transition:** stationary-dim, no scale — see §14
+- **Terminal:** command set `help`, `cd <section>`, `ls`, `whoami`; draggable; starts
+  minimized; opens via clicking a back-wall painting trigger; renders in its own top-level
+  stacking context so nothing (scroll-stack, later animations) can ever cover it while open;
+  has a minimize button — see §15
 
 ---
 
@@ -344,7 +383,7 @@ Use with Midjourney, DALL-E, or SDXL/Stable Diffusion:
 
 ## 14. Scroll Stack / Depth Layering (Piece 2b)
 
-**Locked (2026-07-11), corrected (2026-07-11):** the first Piece 2b build scaled the
+**Locked (2026-07-11), corrected (2026-07-11), confirmed working (2026-07-11):** the first Piece 2b build scaled the
 outgoing section down (`1.0` → `0.94`) while dimming it, which reads as the page *moving
 away* rather than staying put. That's not the intended effect — corrected spec below removes
 scale entirely.
@@ -390,3 +429,76 @@ Every transition — gallery → About, About → Skills & Certs, and so on thro
 - Paper ball unfold animation (Piece 3b) will need to be re-checked against this stack
   model once both exist, since it also animates the gallery → section transition — Piece 3b
   should build *on top of* the stack model established here, not compete with it.
+
+---
+
+## 15. Terminal (Piece 3)
+
+**Locked (2026-07-11).**
+
+### Command set (first pass — minimal, expand later)
+- `help` — lists available commands
+- `cd <section>` — navigates to a section (writes to the same `currentSection` Zustand
+  store the paper balls and scroll already use), e.g. `cd about`, `cd projects`
+- `ls` — lists the 5 navigable sections (the same set `cd` accepts), styled like a directory
+  listing (section keys, one per line or column, in keeping with the terminal-oracle
+  aesthetic)
+- `whoami` — prints a short identity line
+- Unknown command → a short "command not found" style error line, in keeping with the
+  terminal-oracle aesthetic (not a generic browser-console error)
+- Still deliberately excluded for now: `cat <section>`, `clear` — add in a later pass once
+  this set is working end-to-end
+
+### Open/close trigger
+- Terminal starts **minimized/closed** on page load — not visible by default.
+- **Trigger:** one of the existing back-wall photo frames on the right side of the gallery
+  (already baked into `gallery-background.png`, per §3 layer 1 — the tech-stack frame
+  content itself is still a pending asset) becomes a clickable hotspot. Clicking it opens
+  the terminal.
+- Since the frame's real content isn't ready yet, use a subtle acid-green hover glow +
+  the existing crosshair "active" cursor state (filled center dot, per §2 Cursor) as the
+  interactive cue on hover — same treatment as paper balls and the resume scroll. No new
+  visual asset needed for this task; swap in real frame art later without touching the
+  click logic.
+- Clicking the frame again (or a close/minimize control in the terminal's own chrome, see
+  below) closes/minimizes the terminal back down.
+
+### Window behavior
+- **Draggable:** react-rnd or interact.js (see §5) — the terminal can be dragged anywhere
+  within the viewport after opening.
+- **Style:** floating Mac-style window per §3/§1 — title bar with traffic-light dots
+  (plain colored circles are fine visually), monospace body text (JetBrains Mono / IBM Plex
+  Mono, matching §2 Typography), acid-green text on a near-black terminal background,
+  consistent with the existing accent-color discipline.
+- **Shadow:** a small, thin drop shadow around the window edges (e.g.
+  `box-shadow: 0 0 12px rgba(0,0,0,0.5)` or similar — subtle, just enough to separate it
+  visually from whatever is behind it, not a heavy "digital-clean" shadow per the general
+  no-drop-shadow texture rule elsewhere on the site — the terminal is the one exception,
+  since it's meant to read as a physical floating object).
+- **Position on open:** appears front-and-center-ish per the original scene sketch (§3) —
+  exact resting position is Antigravity's call, just make sure it doesn't spawn directly on
+  top of the statue or fully off-screen.
+- **Z-index — absolute top layer (locked 2026-07-11):** once open, the terminal must render
+  above *everything* on the page, with no exceptions — not just the statue/paper
+  balls/hero name, but also the scroll-stack transition layers (Piece 2b) and, later, the
+  paper-ball unfold animation (Piece 3b). No animation or transition anywhere on the site
+  should ever visually cover or clip the terminal while it's open. In practice this likely
+  means rendering the terminal via a React portal to a dedicated top-level DOM node (e.g.
+  directly under `<body>`, sibling to the main scroll container) rather than inside the
+  scroll-stack section tree, so it sits in its own stacking context that scroll-stack
+  z-index values and future animations can't accidentally stack above. Confirm this
+  approach works with whatever layout structure Piece 2b already put in place.
+- **Minimize button (locked 2026-07-11):** the terminal's title bar has an explicit minimize
+  control (can reuse the traffic-light dot styling — doesn't need to be a separate button
+  shape). Clicking it hides the terminal back to its initial invisible state, same as if it
+  had never been opened. This is in addition to, not instead of, the back-wall painting
+  trigger — clicking the frame again should also still toggle it closed/open.
+
+### State management
+- Terminal open/closed state and command history are **UI state, not navigation state** —
+  keep this separate from `navigationStore`'s `currentSection` (a small dedicated store or
+  local component state is fine; don't conflate the two). `cd <section>` commands still
+  write through to the existing `currentSection` store exactly like a paper ball click does.
+- Terminal open/close and drag position should not interfere with the existing
+  `isProgrammatic` scroll-flag pattern used by "Return to Gallery" and the scroll-stack
+  (Piece 2b) — the terminal floats independently of scroll position once open.
