@@ -87,7 +87,8 @@
   left: 3.5rem; /* Moved further to the right to avoid hugging the edge */
   z-index: 1; /* Behind spotlight (2) and statue (3) */
   font-family: var(--font-minecraft), sans-serif;
-  font-size: clamp(3.5rem, 8.5vw, 8rem);
+  --hero-name-font-size: clamp(3.5rem, 8.5vw, 8rem);
+  font-size: var(--hero-name-font-size);
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.02em;
@@ -99,6 +100,10 @@
   
   /* Lower the brightness of the hero name text */
   filter: brightness(0.65);
+}
+
+.quote {
+  font-size: calc(var(--hero-name-font-size) * 0.8);
 }
 
 .secondLine {
@@ -129,7 +134,7 @@
   .heroName {
     top: 1.5em;
     left: 2rem; /* Moved slightly to the right on mobile */
-    font-size: clamp(2rem, 7vw, 4rem);
+    --hero-name-font-size: clamp(2rem, 7vw, 4rem);
   }
 }
 

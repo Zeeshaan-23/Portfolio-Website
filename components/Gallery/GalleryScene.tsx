@@ -7,8 +7,8 @@ import GrainOverlay from "@/components/GrainOverlay/GrainOverlay";
 import styles from "./GalleryScene.module.css";
 
 const TEXT_SETS = [
-  { line1: "Zeeshaan", line2: "Suhail Shaik", indentSecondLine: true },
-  { line1: "Learning fast.", line2: "Building faster.", indentSecondLine: false },
+  { line1: "Zeeshaan", line2: "Suhail Shaik", indentSecondLine: true, isQuote: false },
+  { line1: "Learning fast.", line2: "Building faster.", indentSecondLine: false, isQuote: true },
 ];
 
 /**
@@ -66,6 +66,7 @@ export default function GalleryScene() {
   const [activeLine, setActiveLine] = useState<1 | 2>(1);
   const [ariaLabel, setAriaLabel] = useState("Zeeshaan Suhail Shaik");
   const [indentSecondLine, setIndentSecondLine] = useState(true);
+  const [isQuote, setIsQuote] = useState(false);
 
   useEffect(() => {
     let isCancelled = false;
@@ -80,6 +81,7 @@ export default function GalleryScene() {
       // Update screen reader text to match current set
       setAriaLabel(`${target1} ${target2}`);
       setIndentSecondLine(currentSet.indentSecondLine);
+      setIsQuote(currentSet.isQuote);
 
       // Step 1: Type line 1
       setActiveLine(1);
@@ -191,7 +193,7 @@ export default function GalleryScene() {
       <div className={styles.spotlight} aria-hidden="true" />
 
       {/* ── Layer 2b: Hero Name (Top-left display) ── */}
-      <h1 className={styles.heroName} aria-label={ariaLabel}>
+      <h1 className={`${styles.heroName} ${isQuote ? styles.quote : ""}`} aria-label={ariaLabel}>
         <div aria-hidden="true">
           {text1 || "\u200b"}
           {activeLine === 1 && <span className={styles.cursor} />}
