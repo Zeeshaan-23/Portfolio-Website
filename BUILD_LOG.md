@@ -24,6 +24,7 @@
   * Enforced layout stability by rendering zero-width spaces (`\u200b`) when strings are empty, preventing vertical element height collapse or shifting.
   * Configured conditional second-line indentation (using separate CSS classes) so that the tagline "Building faster." starts left-aligned with no indent, while the name "Suhail Shaik" maintains its 2ch indent.
   * Configured the quote set ("Learning fast." / "Building faster.") to display at **80% of the name's font-size** (`font-size: calc(var(--hero-name-font-size) * 0.8)`) using CSS custom properties for responsive scaling on all screens.
+  * Adjusted the quote tagline `line-height` to `1.1` to resolve visual overlapping between the descender 'g' in line 1 and ascenders in line 2.
   * Enhanced accessibility by dynamically updating `aria-label` to match the active set's complete text, while keeping inner visual typewriter divs hidden from screen readers via `aria-hidden="true"`.
 
 
