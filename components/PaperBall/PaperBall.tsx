@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useNavigationStore } from "@/store/navigationStore";
 import type { SectionId } from "@/store/navigationStore";
 import styles from "./PaperBall.module.css";
@@ -29,7 +28,6 @@ export default function PaperBall({
   bottom,
   size = 110,
 }: PaperBallProps) {
-  const router = useRouter();
   const setCurrentSection = useNavigationStore(
     (state) => state.setCurrentSection
   );

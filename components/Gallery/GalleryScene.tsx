@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useTerminalStore } from "@/store/terminalStore";
 import PaperBall from "@/components/PaperBall/PaperBall";
 import GrainOverlay from "@/components/GrainOverlay/GrainOverlay";
 import styles from "./GalleryScene.module.css";
@@ -67,6 +68,7 @@ export default function GalleryScene() {
   const [ariaLabel, setAriaLabel] = useState("Zeeshaan Suhail Shaik");
   const [indentSecondLine, setIndentSecondLine] = useState(true);
   const [isQuote, setIsQuote] = useState(false);
+  const toggleTerminal = useTerminalStore((state) => state.toggleOpen);
 
   useEffect(() => {
     let isCancelled = false;
@@ -263,6 +265,7 @@ export default function GalleryScene() {
         className={styles.terminalTrigger}
         title="Open Terminal"
         aria-label="Open Terminal"
+        onClick={toggleTerminal}
       >
         <span className="sr-only">Open Terminal</span>
       </button>

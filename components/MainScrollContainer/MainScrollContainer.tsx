@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Lenis from "lenis";
 import { useNavigationStore, SectionId } from "@/store/navigationStore";
 import GalleryScene from "@/components/Gallery/GalleryScene";
 import Footer from "@/components/Footer/Footer";
+import Terminal from "@/components/Terminal/Terminal";
 import styles from "./MainScrollContainer.module.css";
 
 interface SectionData {
@@ -50,7 +51,6 @@ const SECTIONS: SectionData[] = [
 
 export default function MainScrollContainer() {
   const params = useParams();
-  const router = useRouter();
   const currentSection = useNavigationStore((state) => state.currentSection);
   const setCurrentSection = useNavigationStore((state) => state.setCurrentSection);
 
@@ -78,7 +78,7 @@ export default function MainScrollContainer() {
     requestAnimationFrame(raf);
 
     // Expose lenis instance globally for scroll-to-element calls
-    (window as any).lenis = lenis;
+    (window as unknown as { lenis: Lenis }).lenis = lenis;
 
     // Handle book-style scroll stack transitions (dim & subtle scale down of outgoing sections)
     const handleScroll = () => {
@@ -137,7 +137,7 @@ export default function MainScrollContainer() {
 
     return () => {
       lenis.destroy();
-      delete (window as any).lenis;
+      delete (window as unknown as { lenis?: Lenis }).lenis;
       clearTimeout(timer);
     };
   }, [setCurrentSection]);
@@ -261,6 +261,9 @@ export default function MainScrollContainer() {
 
       {/* ── Footer ── */}
       <Footer />
+
+      {/* ── Terminal Window (rendered via portal at body level) ── */}
+      <Terminal />
     </div>
   );
 }
