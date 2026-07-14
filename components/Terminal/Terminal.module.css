@@ -1,0 +1,178 @@
+.window {
+  position: fixed;
+  width: 600px;
+  height: 380px;
+  max-width: 95vw;
+  max-height: 80vh;
+  background-color: rgba(13, 13, 14, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(57, 255, 20, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(57, 255, 20, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-mono), monospace;
+  color: var(--color-accent);
+  z-index: 99999;
+}
+
+.header {
+  height: 36px;
+  background-color: #161618;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  user-select: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.header:active {
+  cursor: grabbing;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 150ms ease;
+}
+
+.dot:hover {
+  opacity: 0.8;
+}
+
+.closeDot {
+  background-color: #ff5f56; /* Mac close red */
+}
+
+.minimizeDot {
+  background-color: #ffbd2e; /* Mac minimize yellow */
+}
+
+.maximizeDot {
+  background-color: #27c93f; /* Mac maximize green */
+  cursor: default; /* Disabled for now */
+}
+
+.title {
+  font-size: 0.75rem;
+  color: rgba(57, 255, 20, 0.7);
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Scrollbar styles inside terminal */
+.body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.2);
+  border-radius: 4px;
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background: rgba(57, 255, 20, 0.5);
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.line {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.inputLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prompt {
+  color: rgba(57, 255, 20, 0.85);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.inputArea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-accent);
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  caret-color: var(--color-accent);
+  width: 100%;
+}
+
+.helpCommand {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  margin-left: 12px;
+  color: rgba(57, 255, 20, 0.9);
+}
+
+.helpDescription {
+  color: #8a8a86;
+}
+
+.lsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.lsItem {
+  color: #39ff14;
+  font-weight: bold;
+}
+
+.welcomeText {
+  color: rgba(57, 255, 20, 0.6);
+  font-size: 0.8rem;
+  border-bottom: 1px dashed rgba(57, 255, 20, 0.15);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.errorText {
+  color: #ff5f56;
+}
