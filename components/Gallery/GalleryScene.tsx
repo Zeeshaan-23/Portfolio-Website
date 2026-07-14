@@ -262,6 +262,7 @@ export default function GalleryScene() {
 
       {/* ── Layer 4d: Terminal Frame Hotspot (clickable back-wall painting) ── */}
       <button
+        id="terminal-trigger"
         className={styles.terminalTrigger}
         title="Open Terminal"
         aria-label="Open Terminal"
