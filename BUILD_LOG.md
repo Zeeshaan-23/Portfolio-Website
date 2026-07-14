@@ -15,7 +15,13 @@
 
 ## Changelog
 
-### 2026-07-12 (Piece 2a Revisions Part 4: Hero Name Typewriter Animation)
+### 2026-07-14 (Piece 16: Signboard Readability Improvements)
+- Improved readability of the wooden signboards above the Resume scroll and Terminal painting:
+  * Processed `Resume-board.png` and `Terminal-board.png` images using a custom YCbCr luminance point transformation to darken the text labels and brighten the wood texture.
+  * Increased the CSS filter brightness from `brightness(0.52)` to `brightness(0.78)` in `GalleryScene.module.css` for clearer visibility.
+  * Pushed all updates to GitHub.
+
+### 2026-07-14 (Piece 2a Revisions Part 4: Hero Name Typewriter Animation)
 - Implemented **Hero Name Typewriter Animation & Rotations**:
   * Created a custom React `useEffect` typing loop with custom `setTimeout` pacing to sequentially type, hold, and delete text strings.
   * Configured a rotation cycle alternating between Set 1: "Zeeshaan" (line 1) / "Suhail Shaik" (line 2), and Set 2: "Learning fast." (line 1) / "Building faster." (line 2).
