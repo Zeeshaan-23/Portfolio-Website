@@ -297,6 +297,7 @@ export default function Terminal() {
           <button
             className={`${styles.dot} ${styles.closeDot}`}
             onClick={() => setOpen(false)}
+            onPointerDown={(e) => e.stopPropagation()}
             title="Close Terminal"
             aria-label="Close Terminal"
           />

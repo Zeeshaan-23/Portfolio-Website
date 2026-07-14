@@ -208,10 +208,10 @@
 /* ── Terminal Frame Hotspot (clickable back-wall painting) ── */
 .terminalTrigger {
   position: absolute;
-  left: 63.5%;
-  top: 32.5%;
-  width: 16.5%;
-  height: 27%;
+  left: 66.5%;
+  top: 33%;
+  width: 12.6%;
+  height: 22%;
   z-index: 4;
   background: transparent;
   border: none;
