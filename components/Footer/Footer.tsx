@@ -6,7 +6,7 @@ export default function Footer() {
       <div className={styles.footerGrid}>
         {/* Column 1: Contact */}
         <div className={styles.column}>
-          <div className={styles.colHeader}>// CONTACT</div>
+          <div className={styles.colHeader}>{"// CONTACT"}</div>
           <div className={styles.colContent}>
             <a href="mailto:zeeshaansuhail23@gmail.com" className={styles.link}>
               zeeshaansuhail23@gmail.com
@@ -16,7 +16,7 @@ export default function Footer() {
 
         {/* Column 2: Links */}
         <div className={styles.column}>
-          <div className={styles.colHeader}>// LINKS</div>
+          <div className={styles.colHeader}>{"// LINKS"}</div>
           <div className={styles.colContent}>
             <a
               href="https://github.com/Zeeshaan-23"
@@ -39,16 +39,16 @@ export default function Footer() {
 
         {/* Column 3: Metadata */}
         <div className={styles.column}>
-          <div className={styles.colHeader}>// METADATA</div>
+          <div className={styles.colHeader}>{"// METADATA"}</div>
           <div className={styles.colContent}>
             <div className={styles.metadataLine}>
-              // Compiled 2026
+              {"// Compiled 2026"}
             </div>
             <div className={styles.metadataLine}>
               &gt; find . -name &quot;portfolio&quot; -type digital
             </div>
             <div className={styles.metadataLine}>
-              &gt; whoami // zeeshaan@portfolio
+              &gt; whoami {"// zeeshaan@portfolio"}
             </div>
           </div>
         </div>

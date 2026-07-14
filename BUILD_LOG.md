@@ -8,12 +8,21 @@
 | 2 | Scroll-based section navigation + fullscreen layout | Smooth scrolling & layout stubs | ✅ |
 | 2a| Gallery enhancements (hero name, texture, footer, cursor + scrollbar) | Visual polish on hero & sections | ✅ |
 | 2b| Scroll-stack / depth layering (gallery + all 5 sections stack sequentially) | Book-like scroll transition model | ✅ |
-| 3 | Terminal component wired to same nav state | Second nav method works | ⬜ |
+| 3 | Terminal component wired to same nav state | Second nav method works | ✅ |
 | 4 | Crack SVG + binary MotionPath animation | Hero animation layer 1 | ⬜ |
 | 5 | ASCII-split statue effect (Three.js) | Hero animation layer 2 (hardest, do last) | ⬜ |
 | 6 | Mobile fallback (pre-rendered statue image/video instead of live Three.js, `prefers-reduced-motion` check) | Perf/accessibility pass | ⬜ |
 
 ## Changelog
+
+### 2026-07-14 (Piece 3: Terminal Component)
+- Implemented **Draggable Floating Terminal Component**:
+  * Created `store/terminalStore.ts` using Zustand to manage the terminal's open/close state.
+  * Built `Terminal.tsx` overlay using React Portals to render the terminal directly inside `document.body` to bypass stacking context and ensure it always floats on top of the section scroll-stack.
+  * Added custom pointer-events based dragging logic (`setPointerCapture`) on the window header for responsive drag operations on both desktop and mobile/touch devices.
+  * Supported standard console commands: `help`, `whoami`, `ls`, `cd <section>` (e.g. `cd about`, `cd /`), and handled unrecognized command errors.
+  * Coordinated `cd <section>` navigation with `isProgrammatic` state from `navigationStore` to transition seamlessly with Lenis smooth scrolling.
+  * Resolved pre-existing and new React JSX comment linter warnings in `Footer.tsx` and removed unused router imports in `MainScrollContainer.tsx` and `PaperBall.tsx`.
 
 ### 2026-07-14 (Piece 16: Signboard Readability Improvements)
 - Improved readability of the wooden signboards above the Resume scroll and Terminal painting:
