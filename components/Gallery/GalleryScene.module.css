@@ -167,6 +167,70 @@
   filter: brightness(0.85) saturate(0.85) drop-shadow(0 0 8px var(--color-accent));
 }
 
+/* ── Wooden Signboards ── */
+.resumeBoard {
+  position: absolute;
+  right: 4%;
+  bottom: 58.5%; /* Directly above resume scroll */
+  z-index: 4;
+  pointer-events: none;
+  /* Rotate visually to match the tilt of the scroll */
+  transform: rotate(-8deg);
+}
+
+.resumeBoardImage {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 110px;
+  /* Visual integration: dim to match ambient gallery wall lighting */
+  filter: brightness(0.78) saturate(0.80);
+}
+
+.terminalBoard {
+  position: absolute;
+  left: 73%; /* Centered over right painting */
+  top: 27.2%; /* Moved downwards (closer to the top of the right painting) */
+  transform: translateX(-50%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.terminalBoardImage {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 120px;
+  /* Visual integration: dim to match ambient gallery wall lighting */
+  filter: brightness(0.78) saturate(0.80);
+}
+
+/* ── Terminal Frame Hotspot (clickable back-wall painting) ── */
+.terminalTrigger {
+  position: absolute;
+  left: 66.4%;
+  top: 31.8%;
+  width: 13.2%;
+  height: 29.5%;
+  z-index: 4;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.terminalTrigger:hover {
+  /* Subtle acid-green hover glow and slight highlight tint */
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.35), inset 0 0 15px rgba(57, 255, 20, 0.15);
+  background-color: rgba(57, 255, 20, 0.04);
+}
+
+.terminalTrigger:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
 @media (max-width: 768px) {
   .resumeScroll {
     right: 3%;
@@ -175,5 +239,21 @@
   .resumeScrollImage {
     max-width: 90px;
   }
+  
+  .resumeBoard {
+    right: 3%;
+    bottom: 61.5%;
+  }
+  .resumeBoardImage {
+    max-width: 80px;
+  }
+
+  .terminalBoard {
+    top: 25.5%; /* Keep aligned above painting on mobile */
+  }
+  .terminalBoardImage {
+    max-width: 85px;
+  }
 }
+
 

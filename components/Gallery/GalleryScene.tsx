@@ -247,6 +247,37 @@ export default function GalleryScene() {
         />
       </a>
 
+      {/* ── Layer 4c: Wooden Signboard for Resume ── */}
+      <div className={styles.resumeBoard} aria-hidden="true">
+        <Image
+          src="/assets/Resume-board.png"
+          alt="Wooden signboard for Resume"
+          width={110}
+          height={73}
+          className={styles.resumeBoardImage}
+        />
+      </div>
+
+      {/* ── Layer 4d: Terminal Frame Hotspot (clickable back-wall painting) ── */}
+      <button
+        className={styles.terminalTrigger}
+        title="Open Terminal"
+        aria-label="Open Terminal"
+      >
+        <span className="sr-only">Open Terminal</span>
+      </button>
+
+      {/* ── Layer 4e: Wooden Signboard for Terminal ── */}
+      <div className={styles.terminalBoard} aria-hidden="true">
+        <Image
+          src="/assets/Terminal-board.png"
+          alt="Wooden signboard for Terminal"
+          width={120}
+          height={68}
+          className={styles.terminalBoardImage}
+        />
+      </div>
+
       {/* ── Layer 5: Film-grain overlay (topmost, no pointer events) ── */}
       <GrainOverlay />
     </div>

@@ -203,6 +203,34 @@ Mark status as pieces complete; keep this table updated in `BUILD_LOG.md`.
   but keep the implementation simple enough that wrapping it in a reduced-motion check later
   is a small change, not a rewrite.
 
+**Tagline rotation (accepted addition, 2026-07-12):** built by Antigravity beyond the
+original Part 4 spec, reviewed and accepted into the design going forward — not a deviation
+to roll back.
+- The typewriter loop alternates between two sets rather than only retyping the name:
+  - **Set 1:** "Zeeshaan" (line 1) / "Suhail Shaik" (line 2) — as originally specified above
+  - **Set 2:** "Learning fast." (line 1) / "Building faster." (line 2)
+- Each set runs through the full type → hold → delete sequence (per the steps above) before
+  handing off to the other set, so the loop reads as: type name, hold, delete name, type
+  tagline, hold, delete tagline, repeat.
+- **Tagline sizing:** Set 2 text renders at 80% of the name's font size
+  (`font-size: calc(var(--hero-name-font-size) * 0.8)`), using the same CSS custom property
+  driving the name so it scales responsively together with it.
+- **Tagline indentation:** unlike "Suhail Shaik" (which keeps its `2ch` indent under
+  "Zeeshaan"), "Building faster." is left-aligned with no indent — handled via a separate
+  CSS class from the name's second line rather than sharing one.
+- **Tagline line-height:** `1.1` on the tagline set specifically, to resolve descender/ascender
+  overlap between "Learning fast." and "Building faster." that the name set's line-height
+  didn't need to account for.
+- **Accessibility:** `aria-label` updates dynamically to the active set's full text; the
+  inner visual typewriter `div`s stay `aria-hidden="true"` so screen readers get the clean
+  text rather than a character-by-character stream.
+
+**Still open / not yet accepted:** two other deviations from the original Part 4 spec came
+in in the same pass — the cursor changed from a thin bar to a Linux-style block cursor
+(`width: 0.12em`, `height: 0.45em`), and typing speed came in at `~120ms`/char instead of the
+specified `~80ms`/char. These are noted but **not** folded into this spec as accepted; decide
+separately whether to keep or revert them.
+
 ---
 
 ## 8. Section Components
@@ -316,6 +344,7 @@ real content, not placeholder.
 - [x] Resume PDF file (`/public/resume.pdf`)
 - [x] Minecraft.ttf local font file (`public/fonts/`) — hero name only
 - [ ] Custom cursor SVG(s) — crosshair default + crosshair-active hover state (see §2 Cursor)
+- [x] Wooden signboard PNGs — `Resume-board.png`, `Terminal-board.png` (see §16)
 
 ---
 
@@ -324,7 +353,7 @@ real content, not placeholder.
 - **Statue:** 2D for now (see §13 for approach)
 - **Framework:** Next.js (App Router)
 - **Hero name font:** Minecraft.ttf (local), dimmed acid-green glow (`brightness(0.65)`), two-line stacked, z-index behind statue — see §7
-- **Hero name animation:** continuous typewriter loop — sequential type-in (line 1 then line 2), reverse-order delete (line 2 then line 1), blinking dimmed-green cursor — see §7
+- **Hero name animation:** continuous typewriter loop — sequential type-in (line 1 then line 2), reverse-order delete (line 2 then line 1), blinking dimmed-green cursor, alternating between the name and a "Learning fast. / Building faster." tagline set (accepted addition) — see §7
 - **Carousels:** Swiper.js or Framer Motion, auto-scroll on idle + manual buttons
 - **Timeline:** Horizontal, with animated sprite support (sprites TBD)
 - **Footer:** Monospace, minimal, museum/cyber aesthetic — built, see `BUILD_LOG.md`
@@ -335,6 +364,8 @@ real content, not placeholder.
   minimized; opens via clicking a back-wall painting trigger; renders in its own top-level
   stacking context so nothing (scroll-stack, later animations) can ever cover it while open;
   has a minimize button — see §15
+- **Wooden signboards:** always-visible labeled boards above the resume scroll and terminal
+  trigger, using provided PNGs, static (no hover/entrance animation) — see §16
 
 ---
 
@@ -502,3 +533,38 @@ Every transition — gallery → About, About → Skills & Certs, and so on thro
 - Terminal open/close and drag position should not interfere with the existing
   `isProgrammatic` scroll-flag pattern used by "Return to Gallery" and the scroll-stack
   (Piece 2b) — the terminal floats independently of scroll position once open.
+
+---
+
+## 16. Wooden Signboards
+
+**Locked (2026-07-12).** Small always-visible wooden signboards with text labels, mounted
+above the resume scroll and the terminal's back-wall painting trigger, so a first-time
+visitor isn't left guessing that either is clickable.
+
+**Assets (provided):**
+- `/public/assets/Resume-board.png` — labeled board for the resume scroll
+- `/public/assets/Terminal-board.png` — labeled board for the terminal trigger frame
+
+**Behavior:**
+- **Always visible** — not a hover-triggered tooltip, present on page load same as the
+  resume scroll and terminal frame themselves.
+- Positioned directly above each respective element (resume scroll on the right wall per
+  §3/§7's resume scroll positioning; the terminal trigger frame per §15's open/close
+  trigger), small in scale — a supporting label, not a focal element competing with the
+  statue or hero name.
+- Should read as part of the museum wall dressing — dimmed/integrated into the ambient
+  lighting similar to the resume scroll's rest-state treatment (§3 layer 7's
+  `brightness(0.45) saturate(0.80)` is a reasonable starting point for visual consistency,
+  though the boards can use their own values if the provided PNGs already bake in
+  appropriate shading — use judgement based on how the assets actually look once placed).
+- Not independently clickable — clicking the board itself doesn't need to trigger
+  anything; the resume scroll and terminal frame beneath keep their existing click targets
+  and hover states (crosshair active-cursor + glow, per §2 Cursor) unchanged.
+- No animation on the boards themselves for this pass (no hover glow, no entrance
+  animation) — purely a static labeling layer. Can revisit later if it feels like it needs
+  more presence.
+
+**Scope note:** this is layout/positioning work only — the label art itself is finished
+(provided PNGs), so this task is about placing and scaling the two images correctly, not
+generating or styling new assets.
