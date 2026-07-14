@@ -27,6 +27,7 @@ export default function Terminal() {
 
   const [mounted, setMounted] = useState(false);
   const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [size, setSize] = useState({ width: 600, height: 380 });
   const [inputValue, setInputValue] = useState("");
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
@@ -37,20 +38,52 @@ export default function Terminal() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMounted(true);
-      // Center terminal window on mount
-      const x = Math.max(20, (window.innerWidth - 600) / 2);
-      const y = Math.max(20, (window.innerHeight - 380) / 2);
-      setPosition({ x, y });
+      // Determine default spawn from trigger element if present
+      const trigger = document.getElementById("terminal-trigger");
+      if (trigger) {
+        const rect = trigger.getBoundingClientRect();
+        setPosition({
+          x: rect.left + window.scrollX,
+          y: rect.top + window.scrollY,
+        });
+        setSize({
+          width: rect.width,
+          height: rect.height,
+        });
+      } else {
+        const x = Math.max(20, (window.innerWidth - 600) / 2);
+        const y = Math.max(20, (window.innerHeight - 380) / 2);
+        setPosition({ x, y });
+      }
     }, 0);
     return () => clearTimeout(timer);
   }, []);
 
-  // Autofocus input when terminal opens
+  // Spawn position/size sync, autofocus, and auto-clear on open/close
   useEffect(() => {
     if (isOpen && mounted) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
+        const trigger = document.getElementById("terminal-trigger");
+        if (trigger) {
+          const rect = trigger.getBoundingClientRect();
+          setPosition({
+            x: rect.left + window.scrollX,
+            y: rect.top + window.scrollY,
+          });
+          setSize({
+            width: rect.width,
+            height: rect.height,
+          });
+        }
         inputRef.current?.focus();
       }, 50);
+      return () => clearTimeout(timer);
+    } else if (!isOpen) {
+      const timer = setTimeout(() => {
+        setHistory([]);
+        setInputValue("");
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isOpen, mounted]);
 
@@ -73,20 +106,54 @@ export default function Terminal() {
     const startX = e.clientX;
     const startY = e.clientY;
     const startPos = { ...position };
+    const currentSize = { ...size };
 
     const handlePointerMove = (moveEvent: PointerEvent) => {
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 
-      // Keep terminal inside bounds roughly
-      const nextX = Math.max(0, Math.min(window.innerWidth - 100, startPos.x + dx));
-      const nextY = Math.max(0, Math.min(window.innerHeight - 40, startPos.y + dy));
+      // Keep terminal inside bounds
+      const nextX = Math.max(0, Math.min(window.innerWidth - currentSize.width, startPos.x + dx));
+      const nextY = Math.max(0, Math.min(window.innerHeight - currentSize.height, startPos.y + dy));
 
       setPosition({ x: nextX, y: nextY });
     };
 
     const handlePointerUp = (upEvent: PointerEvent) => {
       header.releasePointerCapture(upEvent.pointerId);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+  };
+
+  // Custom pointer-event resizing handler for the bottom-right corner
+  const handleResizePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return; // Only resize with left click
+    e.stopPropagation(); // Avoid triggering header drag
+
+    const handle = e.currentTarget;
+    handle.setPointerCapture(e.pointerId);
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startSize = { ...size };
+
+    const handlePointerMove = (moveEvent: PointerEvent) => {
+      const dx = moveEvent.clientX - startX;
+      const dy = moveEvent.clientY - startY;
+
+      // Enforce minimum width/height limits
+      const nextWidth = Math.max(250, startSize.width + dx);
+      const nextHeight = Math.max(150, startSize.height + dy);
+
+      setSize({ width: nextWidth, height: nextHeight });
+    };
+
+    const handlePointerUp = (upEvent: PointerEvent) => {
+      handle.releasePointerCapture(upEvent.pointerId);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
     };
@@ -107,6 +174,11 @@ export default function Terminal() {
     let output: React.ReactNode;
 
     switch (cmd) {
+      case "clear":
+        setHistory([]);
+        setInputValue("");
+        return;
+
       case "help":
         output = (
           <div className={styles.helpContainer}>
@@ -122,6 +194,10 @@ export default function Terminal() {
             <div className={styles.helpCommand}>
               <span>whoami</span>
               <span className={styles.helpDescription}>Display archivist identity profile</span>
+            </div>
+            <div className={styles.helpCommand}>
+              <span>clear</span>
+              <span className={styles.helpDescription}>Clear terminal screen scrollback history</span>
             </div>
             <div className={styles.helpCommand}>
               <span>help</span>
@@ -206,8 +282,14 @@ export default function Terminal() {
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
+        width: `${size.width}px`,
+        height: `${size.height}px`,
       }}
       onClick={handleWindowClick}
+      onWheel={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      data-lenis-prevent
     >
       {/* Title bar / drag handle */}
       <div className={styles.header} onPointerDown={handlePointerDown}>
@@ -218,21 +300,9 @@ export default function Terminal() {
             title="Close Terminal"
             aria-label="Close Terminal"
           />
-          <button
-            className={`${styles.dot} ${styles.minimizeDot}`}
-            onClick={() => setOpen(false)}
-            title="Minimize Terminal"
-            aria-label="Minimize Terminal"
-          />
-          <button
-            className={`${styles.dot} ${styles.maximizeDot}`}
-            title="Maximize Disabled"
-            aria-label="Maximize Disabled"
-            disabled
-          />
         </div>
         <div className={styles.title}>archive@curator:~ (terminal)</div>
-        <div style={{ width: 50 }} /> {/* Spacer */}
+        <div style={{ width: 30 }} /> {/* Spacer */}
       </div>
 
       {/* Terminal terminal output/input body */}
@@ -271,6 +341,9 @@ export default function Terminal() {
           />
         </form>
       </div>
+
+      {/* Resize Handle */}
+      <div className={styles.resizeHandle} onPointerDown={handleResizePointerDown} />
     </div>,
     document.body
   );
