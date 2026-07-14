@@ -40,7 +40,7 @@
   margin: 0;
   padding: 0;
   /* Set custom default crosshair cursor globally */
-  cursor: url('/cursor-default.svg') 12 12, crosshair;
+  cursor: url('/cursor-default.svg') 8 8, crosshair;
 }
 
 html {
@@ -73,7 +73,7 @@ input[type="button"],
 input[type="reset"],
 select,
 .interactive-cursor {
-  cursor: url('/cursor-active.svg') 12 12, crosshair !important;
+  cursor: url('/cursor-active.svg') 8 8, crosshair !important;
 }
 
 /* ---- Webkit Custom Scrollbar (Chrome, Safari, Edge) ---- */

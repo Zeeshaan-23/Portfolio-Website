@@ -49,10 +49,10 @@ cracks, ASCII glitch, hero name, hover states).
 
 ### Cursor
 **Locked (2026-07-11):** custom thin crosshair cursor, global across the whole site (gallery + section pages), replacing the previous "default system cursor" decision.
-- **Shape:** thin (1px) crosshair — two short perpendicular lines with a small open gap at the center (not a solid plus-sign), roughly 20–24px square, hotspot at dead center
+- **Shape:** thin (1px) crosshair — two short perpendicular lines with a small open gap at the center (not a solid plus-sign), sleeker 16px square (reduced from 20-24px), hotspot at dead center
 - **Color:** acid green `#39ff14` — reuses the existing single accent rather than introducing a second color, so it stays visible against both the dark gallery scene and the cream paper sections. A subtle 1px dark stroke/halo (`rgba(17,17,17,0.6)`) around the green lines keeps it legible on the lighter paper backgrounds where pure green-on-cream has lower contrast.
 - **Hover / interactive state:** on clickable elements (paper balls, resume scroll, terminal, nav links) the crosshair gains a small filled center dot — a "targeting" cue that reads as "this is clickable" without switching to a generic system pointer that would break the aesthetic
-- **Implementation:** CSS `cursor: url(crosshair.svg) 12 12, crosshair;` (SVG data URI or file), with a second `crosshair-active.svg` for the `:hover` state on interactive elements. `crosshair` keyword as the fallback if the custom image fails to load — appropriate since it's already visually close to the intended shape.
+- **Implementation:** CSS `cursor: url(crosshair.svg) 8 8, crosshair;` (SVG data URI or file), with a second `crosshair-active.svg` for the `:hover` state on interactive elements. `crosshair` keyword as the fallback if the custom image fails to load — appropriate since it's already visually close to the intended shape.
 
 ### Scrollbar
 **Locked (2026-07-11):** styled to match palette — the unstyled OS scrollbar (plain white) was breaking the aesthetic.
