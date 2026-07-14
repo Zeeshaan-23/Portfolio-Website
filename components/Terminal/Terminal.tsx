@@ -192,6 +192,10 @@ export default function Terminal() {
               <span className={styles.helpDescription}>Navigate to a section (e.g. `cd about`, `cd /`)</span>
             </div>
             <div className={styles.helpCommand}>
+              <span>cat &lt;file&gt;</span>
+              <span className={styles.helpDescription}>View the contents of a file (e.g. `cat resume`)</span>
+            </div>
+            <div className={styles.helpCommand}>
               <span>whoami</span>
               <span className={styles.helpDescription}>Display archivist identity profile</span>
             </div>
@@ -206,6 +210,23 @@ export default function Terminal() {
           </div>
         );
         break;
+
+      case "cat": {
+        const file = arg.toLowerCase().trim();
+        if (file === "resume" || file === "resume.pdf") {
+          window.open("/resume.pdf", "_blank");
+          output = <div>Opening resume.pdf in a new tab...</div>;
+        } else if (!file) {
+          output = <div className={styles.errorText}>usage: cat &lt;filename&gt; (e.g. `cat resume`)</div>;
+        } else {
+          output = (
+            <div className={styles.errorText}>
+              cat: {arg}: No such file or directory
+            </div>
+          );
+        }
+        break;
+      }
 
       case "whoami":
         output = (

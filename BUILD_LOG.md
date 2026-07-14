@@ -15,6 +15,12 @@
 
 ## Changelog
 
+### 2026-07-14 (Piece 3 additions: cat resume command)
+- Added the `cat resume` command to the terminal overlay interface:
+  * Wired support for `cat resume` and `cat resume.pdf` which triggers `window.open("/resume.pdf", "_blank")` to open the resume PDF in a new tab.
+  * Added `cat <file>` to the available commands list inside the `help` menu.
+  * Handled errors/usages for empty files and unknown file names.
+
 ### 2026-07-14 (Piece 3 Revisions: Terminal Fixes + Cursor Sizing)
 - Implemented five targeted improvements across the custom cursor and terminal:
   * Aligned the back-wall painting trigger hotspot bounds to the actual visual frame in `gallery-background.png` (using `left: 63.5%`, `top: 32.5%`, `width: 16.5%`, `height: 27%`).
