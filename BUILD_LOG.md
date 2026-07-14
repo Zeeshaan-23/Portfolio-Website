@@ -15,6 +15,16 @@
 
 ## Changelog
 
+### 2026-07-14 (Piece 3 Revisions: Terminal Fixes + Cursor Sizing)
+- Implemented five targeted improvements across the custom cursor and terminal:
+  * Aligned the back-wall painting trigger hotspot bounds to the actual visual frame in `gallery-background.png` (using `left: 63.5%`, `top: 32.5%`, `width: 16.5%`, `height: 27%`).
+  * Structured the terminal window to open exactly at the painting trigger bounds (coordinate-matched using `.getBoundingClientRect()`).
+  * Implemented custom resizing logic via pointer events (bottom-right NWSE resize handle) so the window remains fully resizable and draggable.
+  * Added the `clear` command and configured auto-clear on close to prevent scrollback state persistence across sessions.
+  * Prevented terminal scroll events from bubbling up to Lenis using `data-lenis-prevent` and `e.stopPropagation()` event containment.
+  * Cleaned up window header controls by removing non-functional minimize/maximize buttons, leaving only a working close control.
+  * Reduced custom crosshair cursor overall dimensions from `24px` to `16px` for a sleeker visual aesthetic, and offset the hotspot coordinate mappings to `8 8` in `globals.css` to preserve perfect centering.
+
 ### 2026-07-14 (Piece 3: Terminal Component)
 - Implemented **Draggable Floating Terminal Component**:
   * Created `store/terminalStore.ts` using Zustand to manage the terminal's open/close state.
